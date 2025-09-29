@@ -1,1 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THUNDER KARTELLS</title>
+  <style>
+    /* Reset + base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html,body { height: 100%; }
+    body {
+      font-family: "Arial", sans-serif;
+      color: #fff;
+      background-color: #0a0a0a; /* Dark background */
+      overflow: hidden;
+      position: relative;
+    }
 
+    /* Animated gradient overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(270deg, rgba(0,170,255,0.12), rgba(0,255,255,0.06), rgba(0,170,255,0.12));
+      background-size: 600% 600%;
+      animation: bgMove 20s ease infinite;
+      z-index: 0;
+    }
+    @keyframes bgMove {
+      0%{ background-position:0% 50%; } 50%{ background-position:100% 50%; } 100%{ background-position:0% 50%; }
+    }
+
+    /* Preloader */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 9999;
+      transition: opacity .6s ease, visibility .6s ease;
+    }
+    #preloader.hide { opacity:0; visibility:hidden; pointer-events:none; }
+
+    .circle {
+      width: 110px;
+      height: 110px;
+      border-radius:50%;
+      border:8px solid rgba(0,255,255,0.16);
+      border-top-color: #0ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 20px rgba(0,255,255,0.15), 0 0 40px rgba(0,170,255,0.15);
+    }
+    .circle span {
+      font-weight:800;
+      color:#0ff;
+      font-size:28px;
+      text-shadow: 0 0 10px #0ff;
+      letter-spacing:1px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Main layout */
+    #app {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      gap: 18px;
+      opacity: 0;
+      transition: opacity .8s ease, transform .8s ease;
+      transform: translateY(6px);
+    }
+    body.loaded #app { opacity: 1; transform: translateY(0); }
+
+    /* Top-left TK */
+    .top-left {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      z-index: 5;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.2));
+      padding: 8px 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+    }
+    .top-left .tk-small { color:#0ff; font-weight:800; font-size:18px; text-shadow:0 0 8px #0ff; }
+    .top-left .tag { color:#ddd; font-size:12px; opacity:0.9; }
+
+    /* Three-dot menu (top-right) */
+    .menu-wrap {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 6;
+    }
+    .menu-btn {
+      width:40px; height:40px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(0,0,0,0.45);
+      border: none; color:#fff; font-size:20px; cursor:pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+      backdrop-filter: blur(6px);
+    }
+    .menu-list {
+      position: absolute;
+      right: 0;
+      margin-top:8px;
+      background: rgba(10,10,10,0.95);
+      border-radius:10px;
+      min-width:160px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      overflow:hidden;
+      transform-origin: top right;
+      transform: scale(.95);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .18s ease, transform .18s ease, visibility .18s;
+    }
+    .menu-list.show { opacity:1; visibility:visible; transform:scale(1); }
+    .menu-list a {
+      display:block; padding:10px 12px; text-decoration:none; color:#ddd;
+      font-size:14px; border-bottom:1px solid rgba(255,255,255,0.03);
+    }
+    .menu-list a:last-child { border-bottom: none; }
+    .menu-list a:hover { background: rgba(0,170,255,0.06); color:#0ff; }
+
+    /* Center big title */
+    .title-wrap {
+      z-index:2;
+    }
+    .title-wrap h1 {
+      font-size:56px;
+      letter-spacing:6px;
+      margin-bottom:6px;
+      color:#0ff;
+      font-weight:900;
+      text-shadow: 0 0 18px #0ff, 0 0 36px rgba(0,170,255,0.6);
+      animation: glow 1.6s ease-in-out infinite alternate;
+    }
+    .title-wrap p.sub {
+      font-size:18px;
+      color:#eee;
+      margin-bottom:14px;
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+      opacity:0.95;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 12px #0ff, 0 0 28px rgba(0,170,255,0.5); transform: translateY(0); }
+      to { text-shadow: 0 0 30px #0ff, 0 0 60px rgba(0,170,255,0.9); transform: translateY(-6px); }
+    }
+
+    /* Buttons row */
+    .btn-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; z-index:2; }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 16px;
+      border-radius:10px;
+      background: linear-gradient(90deg,#0ff,#00aaff);
+      color:#000;
+      text-decoration:none;
+      font-weight:700;
+      box-shadow: 0 8px 30px rgba(0,170,255,0.15);
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+    .btn:hover { transform: translateY(-4px); box-shadow:0 18px 50px rgba(0,170,255,0.18); }
+
+    /* Footer small */
+    footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      z-index:2;
+      color: #ddd;
+      font-size:13px;
+      opacity:0.9;
+      text-shadow:0 0 6px rgba(0,0,0,0.6);
+    }
+
+    /* Gallery modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 9998;
+      opacity:0;
+      visibility:hidden;
+      transition: opacity .18s ease, visibility .18s;
+    }
+    .modal.show { opacity:1; visibility:visible; }
+    .gallery {
+      width: min(920px, 94vw);
+      height: min(560px, 86vh);
+      background: linear-gradient(180deg, rgba(10,10,10,0.98), rgba(6,6,6,0.98));
+      border-radius: 12px;
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    }
+    .gallery .stage { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:8px; background:#000; }
+    .gallery img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
+    .gallery .controls { display:flex; justify-content:space-between; gap:8px; align-items:center; }
+    .ghost-btn { background:transparent; border:1px solid rgba(255,255,255,0.06); color:#ddd; padding:8px 12px; border-radius:8px; cursor:pointer; }
+    .close-x { background:transparent; border:none; color:#ddd; font-size:20px; cursor:pointer; }
+
+    /* Responsive adjustments */
+    @media (max-width:720px) {
+      .title-wrap h1 { font-size:36px; letter-spacing:3px; }
+      .title-wrap p.sub { font-size:15px; }
+      .circle { width:86px; height:86px; border-width:6px; }
+      .circle span { font-size:22px; }
+      .menu-list { min-width:140px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="circle"><span>TK</span></div>
+  </div>
+
+  <!-- App Content -->
+  <div id="app" aria-hidden="true">
+    <!-- Top-left TK mini -->
+    <div class="top-left" role="note" aria-label="TK tag">
+      <div class="tk-small">TK</div>
+      <div class="tag">Thunder Kartells</div>
+    </div>
+
+    <!-- Top-right 3-dot menu -->
+    <div class="menu-wrap" aria-hidden="false">
+      <button class="menu-btn" id="menuToggle" aria-haspopup="true" aria-expanded="false" title="Menu">⋮</button>
+      <div class="menu-list" id="menuList" role="menu" aria-hidden="true">
+        <a href="#home" role="menuitem">Home</a>
+        <a href="#members" role="menuitem">Members</a>
+        <a href="#events" role="menuitem">Events</a>
+        <a href="#contact" role="menuitem">Contact</a>
+        <a href="#about" role="menuitem">About</a>
+      </div>
+    </div>
+
+    <!-- Center Title -->
+    <div class="title-wrap" id="home">
+      <h1>TK — THUNDER KARTELLS</h1>
+      <p class="sub">A Brotherhood of Power, Unity & Vibes. We rise together.</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row" role="navigation" aria-label="Main links">
+      <a class="btn" id="discordBtn" href="https://discord.gg/FTMyjKs8" target="_blank" rel="noopener noreferrer">🎮 Discord</a>
+      <a class="btn" id="galleryBtn" href="#" role="button">🖼 Gallery</a>
+      <a class="btn" id="youtubeBtn" href="#" target="_blank" rel="noopener noreferrer">▶️ YouTube</a>
+    </div>
+
+    <!-- Footer text -->
+    <footer>© 2025 Thunder Kartells | All Rights Reserved</footer>
+  </div>
+
+  <!-- Gallery Modal (hidden initially) -->
+  <div class="modal" id="galleryModal" aria-hidden="true" role="dialog" aria-label="Gallery">
+    <div class="gallery" role="document">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong style="color:#0ff;">Gallery</strong>
+        <button class="close-x" id="closeGallery" title="Close">✕</button>
+      </div>
+      <div class="stage" id="galleryStage">
+        <img id="galleryImage" src="https://via.placeholder.com/1200x700/001122/00ffee?text=Thunder+Kartells+1" alt="Gallery image">
+      </div>
+      <div class="controls">
+        <div>
+          <button class="ghost-btn" id="prevImg">◀ Prev</button>
+          <button class="ghost-btn" id="nextImg">Next ▶</button>
+        </div>
+        <div style="color:#ccc; font-size:13px;">Tip: Replace gallery URLs in the code with your images.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Preloader hide logic
+    (function(){
+      const pre = document.getElementById('preloader');
+      const app = document.getElementById('app');
+
+      function finishLoad() {
+        pre.classList.add('hide');
+        document.body.classList.add('loaded');
+        app.setAttribute('aria-hidden', 'false');
+      }
+
+      window.addEventListener('load', () => { setTimeout(finishLoad, 1200); });
+      setTimeout(() => { if (!document.body.classList.contains('loaded')) finishLoad(); }, 5000);
+    })();
+
+    // Menu toggle
+    (function(){
+      const btn = document.getElementById('menuToggle');
+      const list = document.getElementById('menuList');
+      let open = false;
+      btn.addEventListener('click', (e) => {
+        open = !open;
+        list.classList.toggle('show', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        list.setAttribute('aria-hidden', open ? 'false' : 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !list.contains(e.target)) {
+          open = false;
+          list.classList.remove('show');
+          btn.setAttribute('aria-expanded','false');
+          list.setAttribute('aria-hidden','true');
+        }
+      });
+    })();
+
+    // Gallery logic
+    (function(){
+      const images = [
+        "https://via.placeholder.com/1200x700/001122/00ffee?text=Thunder+Kartells+1",
+        "https://via.placeholder.com/1200x700/0a0a0a/00ddff?text=Thunder+Kartells+2",
+        "https://via.placeholder.com/1200x700/021124/7fefff?text=Thunder+Kartells+3"
+      ];
+      let idx = 0;
+      const galleryBtn = document.getElementById('galleryBtn');
+      const modal = document.getElementById('galleryModal');
+      const galleryImage = document.getElementById('galleryImage');
+      const closeG = document.getElementById('closeGallery');
+      const prev = document.getElementById('prevImg');
+      const next = document.getElementById('nextImg');
+
+      function openGallery(i=0){
+        idx = i;
+        galleryImage.src = images[idx];
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeGallery(){
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
+      galleryBtn.addEventListener('click', (e) => { e.preventDefault(); openGallery(0); });
+      closeG.addEventListener('click', closeGallery);
+      prev.addEventListener('click', () => { idx = (idx - 1 + images.length) % images.length; galleryImage.src = images[idx]; });
+      next.addEventListener('click', () => { idx = (idx + 1) % images.length; galleryImage.src = images[idx]; });
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeGallery(); });
+      document.addEventListener('keydown', (e) => {
+        if (modal.classList.contains('show')){
+          if (e.key === 'ArrowLeft') prev.click();
+          if (e.key === 'ArrowRight') next.click();
+          if (e.key === 'Escape') closeGallery();
+        }
+      });
+    })();
+
+    // YouTube link placeholder
+    (function(){ document.getElementById('youtubeBtn').href = "https://www.youtube.com/"; })();
+
+    document.addEventListener('keyup', (e) => { if (e.key === 'Tab') document.body.classList.add('show-focus'); });
+  </script>
+</body>
+  </html>
