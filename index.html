@@ -492,3 +492,162 @@ function editButton(index){
 
 </body>
 </html> 
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Niche section ke liye minimum height bada karo */
+  #thunderFooter {
+    min-height: 500px; /* scroll trigger ke liye badi height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: #111;
+    color: #0ff;
+    overflow: hidden;
+  }
+
+  .footer-text {
+    font-size: 28px;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
+  }
+
+  .footer-text.small {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+</style>
+<!-- Gallery Button -->
+<div id="galleryBtn" style="text-align:center; margin:20px;">
+  <a href="#" id="galleryLink" style="background:#ff5555; color:#fff; padding:10px 20px; border-radius:5px; text-decoration:none;">
+    Gallery
+  </a>
+</div>
+
+<script>
+  // Gallery Button Functionality
+  const galleryBtn = document.getElementById('galleryLink');
+
+  // Replace with your image URL
+  const galleryImage = "https://via.placeholder.com/600x400"; 
+
+  galleryBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    // Open image in new tab
+    window.open(galleryImage, "_blank");
+  });
+</script>
+<!-- ========= Thunder Kartells Footer ========= -->
+<footer style="
+  background:#0b0b0b;
+  color:#cfefff;
+  padding:24px 16px;
+  text-align:center;
+  font-family: Arial, sans-serif;
+  font-weight:700;
+  letter-spacing:0.5px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.6);
+">
+  <div style="font-size:14px; line-height:1.4;">
+    2025 &nbsp; THUNDER KARTELLS &nbsp; • &nbsp; EMERGENCY HAMBURG
+  </div>
+  <div style="font-size:12px; color:#9fbecf; margin-top:8px;">
+    COPYRIGHTS RESERVED
+  </div>
+</footer>
+<!-- ============================================ -->
+<!-- ========= Thunder Kartells Extra Features Footer ========= -->
+<footer style="
+  background:#0b0b0b;
+  color:#cfefff;
+  padding:40px 20px;
+  text-align:center;
+  font-family: Arial, sans-serif;
+  font-weight:700;
+  letter-spacing:0.5px;
+  position:relative;
+  overflow:hidden;
+">
+  <!-- Scroll-in animated main text -->
+  <div style="
+    font-size:18px;
+    margin-bottom:12px;
+    transform: translateY(50px);
+    opacity:0;
+    animation: slideUp 1s forwards 0.3s;
+  ">
+    THUNDER KARTELLS &nbsp; • &nbsp; EMERGENCY HAMBURG
+  </div>
+
+  <!-- Navigation links -->
+  <div style="
+    margin-bottom:16px;
+    transform: translateY(50px);
+    opacity:0;
+    animation: slideUp 1s forwards 0.6s;
+  ">
+    <a href="#about" style="color:#cfefff; margin:0 12px; text-decoration:none; font-weight:bold;">About</a>
+    <a href="#gallery" style="color:#cfefff; margin:0 12px; text-decoration:none; font-weight:bold;">Gallery</a>
+    <a href="#join" style="color:#cfefff; margin:0 12px; text-decoration:none; font-weight:bold;">Join</a>
+  </div>
+
+  <!-- YouTube button -->
+  <div style="
+    margin-bottom:16px;
+    transform: translateY(50px);
+    opacity:0;
+    animation: slideUp 1s forwards 0.9s;
+  ">
+    <a href="https://youtube.com/@thunderkartells_eh?si=3SVh4RSciA7aB8Kl" target="_blank" style="
+      display:inline-block;
+      background:#ff0000;
+      color:white;
+      padding:10px 18px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:bold;
+      box-shadow:0 4px 6px rgba(0,0,0,0.3);
+      transition:0.3s;
+    " onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+      YouTube
+    </a>
+  </div>
+
+  <!-- Scroll-to-top button -->
+  <div style="
+    transform: translateY(50px);
+    opacity:0;
+    animation: slideUp 1s forwards 1.2s;
+    margin-top:12px;
+  ">
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="
+      background:#00bfff;
+      color:#fff;
+      padding:8px 14px;
+      border:none;
+      border-radius:6px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+    " onmouseover="this.style.background='#0099cc';" onmouseout="this.style.background='#00bfff';">
+      Scroll to Top
+    </button>
+  </div>
+</footer>
+
+<!-- Slide Up Animation -->
+<style>
+@keyframes slideUp {
+  to { transform: translateY(0); opacity:1; }
+}
+</style>
