@@ -382,3 +382,113 @@
   </script>
 </body>
   </html>
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thunder Kartells</title>
+<style>
+  body { background:#111; color:#0ff; font-family:sans-serif; }
+  .btn { padding:8px 12px; margin:5px; border:none; border-radius:5px; background:#0ff; color:#111; cursor:pointer; }
+  #adminPanel { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); color:#0ff; z-index:9999; justify-content:center; align-items:flex-start; flex-direction:column; gap:12px; padding:20px; overflow:auto; }
+  input, select { padding:6px; border-radius:5px; border:none; }
+  .buttonItem { display:flex; gap:8px; align-items:center; margin-bottom:5px; }
+</style>
+</head>
+<body>
+
+<h1>Thunder Kartells</h1>
+<div id="buttonsContainer"></div>
+
+<!-- Admin Panel Toggle -->
+<button id="adminToggle" class="btn" style="position:fixed; top:10px; right:10px;">Admin Panel</button>
+
+<!-- Admin Panel -->
+<div id="adminPanel">
+  <h2>Admin Panel</h2>
+  <input type="password" id="adminPass" placeholder="Enter password">
+  <button id="unlockBtn" class="btn">Unlock</button>
+  <button id="closeAdmin" class="btn">Close</button>
+
+  <hr>
+  <h3>Manage Buttons</h3>
+  <div id="buttonList"></div>
+  <input type="text" id="newButtonName" placeholder="Button Name">
+  <input type="text" id="newButtonURL" placeholder="Button URL">
+  <button id="addButton" class="btn">Add Button</button>
+</div>
+
+<script>
+const ADMIN_PASSWORD = "TK2025"; // change as you like
+let isAdmin = false;
+const buttonsContainer = document.getElementById('buttonsContainer');
+const buttonList = document.getElementById('buttonList');
+let buttons = []; // store buttons [{name,url}]
+
+function renderButtons() {
+  buttonsContainer.innerHTML = '';
+  buttonList.innerHTML = '';
+  buttons.forEach((btn, index) => {
+    // Display main buttons
+    const mainBtn = document.createElement('button');
+    mainBtn.className = 'btn';
+    mainBtn.textContent = btn.name;
+    mainBtn.onclick = () => window.open(btn.url,'_blank');
+    buttonsContainer.appendChild(mainBtn);
+
+    // Display in admin list
+    const div = document.createElement('div');
+    div.className = 'buttonItem';
+    div.innerHTML = `
+      <span>${btn.name} - ${btn.url}</span>
+      <button class="btn" onclick="editButton(${index})">Edit</button>
+      <button class="btn" onclick="removeButton(${index})">Remove</button>
+    `;
+    buttonList.appendChild(div);
+  });
+}
+
+// Admin panel toggle
+document.getElementById('adminToggle').addEventListener('click', () => { document.getElementById('adminPanel').style.display='flex'; });
+document.getElementById('closeAdmin').addEventListener('click', () => { document.getElementById('adminPanel').style.display='none'; });
+
+// Unlock
+document.getElementById('unlockBtn').addEventListener('click', () => {
+  const pass = document.getElementById('adminPass').value;
+  if(pass === ADMIN_PASSWORD){
+    isAdmin = true;
+    alert("Admin Access Granted!");
+    document.getElementById('adminPass').style.display='none';
+    document.getElementById('unlockBtn').style.display='none';
+    renderButtons();
+  } else alert("Wrong Password!");
+});
+
+// Add Button
+document.getElementById('addButton').addEventListener('click', () => {
+  if(!isAdmin) return alert("Unlock admin first!");
+  const name = document.getElementById('newButtonName').value;
+  const url = document.getElementById('newButtonURL').value;
+  if(name && url){
+    buttons.push({name,url});
+    renderButtons();
+    document.getElementById('newButtonName').value='';
+    document.getElementById('newButtonURL').value='';
+  } else alert("Enter Name & URL");
+});
+
+// Edit & Remove functions
+function removeButton(index){ buttons.splice(index,1); renderButtons(); }
+function editButton(index){
+  const newName = prompt("Enter new name:", buttons[index].name);
+  const newURL = prompt("Enter new URL:", buttons[index].url);
+  if(newName && newURL){
+    buttons[index]={name:newName,url:newURL};
+    renderButtons();
+  }
+}
+</script>
+
+</body>
+</html> 
