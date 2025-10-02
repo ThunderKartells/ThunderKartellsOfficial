@@ -11,8 +11,8 @@
     body {
       font-family: "Arial", sans-serif;
       color: #fff;
-      background-color: #0a0a0a; /* Dark background */
-      overflow: hidden;
+      background-color: #0a0a0a;
+      overflow-x: hidden;
       position: relative;
     }
 
@@ -47,28 +47,61 @@
       width: 110px;
       height: 110px;
       border-radius:50%;
-      border:8px solid rgba(0,255,255,0.16);
-      border-top-color: #0ff;
+      border: 8px solid transparent;
+      border-top-color: #ff0000;
+      border-right-color: #00ff00;
+      border-bottom-color: #0000ff;
+      border-left-color: #ffff00;
       display:flex;
       align-items:center;
       justify-content:center;
-      animation: spin 1s linear infinite;
-      box-shadow: 0 0 20px rgba(0,255,255,0.15), 0 0 40px rgba(0,170,255,0.15);
+      animation: spin 1s linear infinite, colorChange 3s infinite alternate;
+      box-shadow: 0 0 20px rgba(255,0,0,0.3), 0 0 40px rgba(0,255,0,0.3), 0 0 60px rgba(0,0,255,0.3);
+      position: relative;
+    }
+    .circle::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 8px solid transparent;
+      border-top-color: #ff00ff;
+      border-right-color: #00ffff;
+      border-bottom-color: #ffff00;
+      border-left-color: #ff0000;
+      animation: spinReverse 1.5s linear infinite, colorChange2 4s infinite alternate;
     }
     .circle span {
       font-weight:800;
-      color:#0ff;
+      color:#fff;
       font-size:28px;
-      text-shadow: 0 0 10px #0ff;
+      text-shadow: 0 0 10px #fff, 0 0 20px #0ff;
       letter-spacing:1px;
+      z-index: 1;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spinReverse { to { transform: rotate(-360deg); } }
+    @keyframes colorChange {
+      0% { border-top-color: #ff0000; border-right-color: #00ff00; border-bottom-color: #0000ff; border-left-color: #ffff00; }
+      25% { border-top-color: #00ff00; border-right-color: #0000ff; border-bottom-color: #ffff00; border-left-color: #ff0000; }
+      50% { border-top-color: #0000ff; border-right-color: #ffff00; border-bottom-color: #ff0000; border-left-color: #00ff00; }
+      75% { border-top-color: #ffff00; border-right-color: #ff0000; border-bottom-color: #00ff00; border-left-color: #0000ff; }
+      100% { border-top-color: #ff0000; border-right-color: #00ff00; border-bottom-color: #0000ff; border-left-color: #ffff00; }
+    }
+    @keyframes colorChange2 {
+      0% { border-top-color: #ff00ff; border-right-color: #00ffff; border-bottom-color: #ffff00; border-left-color: #ff0000; }
+      25% { border-top-color: #00ffff; border-right-color: #ffff00; border-bottom-color: #ff0000; border-left-color: #ff00ff; }
+      50% { border-top-color: #ffff00; border-right-color: #ff0000; border-bottom-color: #ff00ff; border-left-color: #00ffff; }
+      75% { border-top-color: #ff0000; border-right-color: #ff00ff; border-bottom-color: #00ffff; border-left-color: #ffff00; }
+      100% { border-top-color: #ff00ff; border-right-color: #00ffff; border-bottom-color: #ffff00; border-left-color: #ff0000; }
+    }
 
     /* Main layout */
     #app {
       position: relative;
       z-index: 1;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -224,6 +257,108 @@
     .ghost-btn { background:transparent; border:1px solid rgba(255,255,255,0.06); color:#ddd; padding:8px 12px; border-radius:8px; cursor:pointer; }
     .close-x { background:transparent; border:none; color:#ddd; font-size:20px; cursor:pointer; }
 
+    /* Allies Modal */
+    .allies-modal {
+      width: min(600px, 90vw);
+      max-height: 80vh;
+      background: linear-gradient(180deg, rgba(10,10,10,0.98), rgba(6,6,6,0.98));
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+      overflow-y: auto;
+    }
+    .allies-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .allies-header h2 {
+      color: #0ff;
+      font-size: 24px;
+    }
+    .allies-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .ally-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .ally-card:hover {
+      transform: translateY(-5px);
+      background: rgba(0,170,255,0.1);
+    }
+    .ally-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 15px;
+      background: rgba(0,170,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+    .ally-name {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #0ff;
+      font-size: 22px;
+    }
+    .ally-desc {
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+    .spg-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .spg-btn {
+      background: linear-gradient(90deg, #ff6b00, #ff8c00);
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      transition: transform 0.2s ease;
+    }
+    .spg-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Content sections for scrollability */
+    .content-section {
+      width: 100%;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    .section-title {
+      color: #0ff;
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 0 10px #0ff;
+    }
+
     /* Responsive adjustments */
     @media (max-width:720px) {
       .title-wrap h1 { font-size:36px; letter-spacing:3px; }
@@ -231,6 +366,8 @@
       .circle { width:86px; height:86px; border-width:6px; }
       .circle span { font-size:22px; }
       .menu-list { min-width:140px; }
+      .ally-name { font-size: 18px; }
+      .spg-buttons { flex-direction: column; }
     }
   </style>
 </head>
@@ -253,9 +390,6 @@
       <button class="menu-btn" id="menuToggle" aria-haspopup="true" aria-expanded="false" title="Menu">⋮</button>
       <div class="menu-list" id="menuList" role="menu" aria-hidden="true">
         <a href="#home" role="menuitem">Home</a>
-        <a href="#members" role="menuitem">Members</a>
-        <a href="#events" role="menuitem">Events</a>
-        <a href="#contact" role="menuitem">Contact</a>
         <a href="#about" role="menuitem">About</a>
       </div>
     </div>
@@ -271,10 +405,21 @@
       <a class="btn" id="discordBtn" href="https://discord.gg/FTMyjKs8" target="_blank" rel="noopener noreferrer">🎮 Discord</a>
       <a class="btn" id="galleryBtn" href="#" role="button">🖼 Gallery</a>
       <a class="btn" id="youtubeBtn" href="#" target="_blank" rel="noopener noreferrer">▶️ YouTube</a>
+      <a class="btn" id="alliesBtn" href="#" role="button">🤝 ALLIES</a>
+    </div>
+
+    <!-- About Section -->
+    <div class="content-section" id="about">
+      <h2 class="section-title">About Thunder Kartells</h2>
+      <p style="text-align: center; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+        Thunder Kartells is a premier gaming community founded on principles of loyalty, skill, and camaraderie. 
+        We dominate competitive scenes while maintaining a brotherhood that supports each member's growth. 
+        Our ranks include some of the most skilled players across multiple gaming platforms.
+      </p>
     </div>
 
     <!-- Footer text -->
-    <footer>© 2025 Thunder Kartells | All Rights Reserved</footer>
+    <footer>FOUNDED 2025</footer>
   </div>
 
   <!-- Gallery Modal (hidden initially) -->
@@ -285,14 +430,43 @@
         <button class="close-x" id="closeGallery" title="Close">✕</button>
       </div>
       <div class="stage" id="galleryStage">
-        <img id="galleryImage" src="https://via.placeholder.com/1200x700/001122/00ffee?text=Thunder+Kartells+1" alt="Gallery image">
+        <img id="galleryImage" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Gaming setup">
       </div>
       <div class="controls">
         <div>
           <button class="ghost-btn" id="prevImg">◀ Prev</button>
           <button class="ghost-btn" id="nextImg">Next ▶</button>
         </div>
-        <div style="color:#ccc; font-size:13px;">Tip: Replace gallery URLs in the code with your images.</div>
+        <div style="color:#ccc; font-size:13px;">Thunder Kartells Elite Gaming Setup</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Allies Modal (hidden initially) -->
+  <div class="modal" id="alliesModal" aria-hidden="true" role="dialog" aria-label="Allies">
+    <div class="allies-modal" role="document">
+      <div class="allies-header">
+        <h2>Our Allies</h2>
+        <button class="close-x" id="closeAllies" title="Close">✕</button>
+      </div>
+      <div class="allies-content">
+        <div class="ally-card">
+          <div class="ally-logo">🛡️</div>
+          <div class="ally-name">SPG - Special Protection Group</div>
+          <div class="ally-desc">
+            Elite Roblox unit in Emergency Hamburg.<br>
+            Discipline • Protection • Teamwork.<br>
+            Join structured roleplay operations, ranked progressions, and city security missions.
+          </div>
+          <div class="spg-buttons">
+            <a href="#" class="spg-btn">📌 Join Discord</a>
+            <a href="#" class="spg-btn">💬 Apply to SPG</a>
+            <a href="#" class="spg-btn">📌 View Gallery</a>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 20px; text-align: center;">
+        <p style="color: #aaa; font-size: 14px;">Interested in becoming an ally? Contact us on Discord!</p>
       </div>
     </div>
   </div>
@@ -337,9 +511,9 @@
     // Gallery logic
     (function(){
       const images = [
-        "https://via.placeholder.com/1200x700/001122/00ffee?text=Thunder+Kartells+1",
-        "https://via.placeholder.com/1200x700/0a0a0a/00ddff?text=Thunder+Kartells+2",
-        "https://via.placeholder.com/1200x700/021124/7fefff?text=Thunder+Kartells+3"
+        "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+        "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+        "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80"
       ];
       let idx = 0;
       const galleryBtn = document.getElementById('galleryBtn');
@@ -375,279 +549,61 @@
       });
     })();
 
+    // ALLIES button functionality
+    (function(){
+      const alliesBtn = document.getElementById('alliesBtn');
+      const alliesModal = document.getElementById('alliesModal');
+      const closeAllies = document.getElementById('closeAllies');
+      
+      function openAlliesModal(){
+        alliesModal.classList.add('show');
+        alliesModal.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeAlliesModal(){
+        alliesModal.classList.remove('show');
+        alliesModal.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
+      
+      alliesBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAlliesModal();
+      });
+      
+      closeAllies.addEventListener('click', closeAlliesModal);
+      alliesModal.addEventListener('click', (e) => { 
+        if (e.target === alliesModal) closeAlliesModal(); 
+      });
+      
+      document.addEventListener('keydown', (e) => {
+        if (alliesModal.classList.contains('show') && e.key === 'Escape') {
+          closeAlliesModal();
+        }
+      });
+    })();
+
     // YouTube link placeholder
     (function(){ document.getElementById('youtubeBtn').href = "https://youtube.com/@thunderkartells_eh?si=3SVh4RSciA7aB8Kl"; })();
+
+    // Smooth scrolling for menu links
+    document.querySelectorAll('.menu-list a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+          // Close menu after clicking
+          document.getElementById('menuList').classList.remove('show');
+          document.getElementById('menuToggle').setAttribute('aria-expanded', 'false');
+          document.getElementById('menuList').setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
 
     document.addEventListener('keyup', (e) => { if (e.key === 'Tab') document.body.classList.add('show-focus'); });
   </script>
 </body>
-  </html>
- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thunder Kartells</title>
-<style>
-  body { background:#111; color:#0ff; font-family:sans-serif; }
-  .btn { padding:8px 12px; margin:5px; border:none; border-radius:5px; background:#0ff; color:#111; cursor:pointer; }
-  #adminPanel { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); color:#0ff; z-index:9999; justify-content:center; align-items:flex-start; flex-direction:column; gap:12px; padding:20px; overflow:auto; }
-  input, select { padding:6px; border-radius:5px; border:none; }
-  .buttonItem { display:flex; gap:8px; align-items:center; margin-bottom:5px; }
-</style>
-</head>
-<body>
-
-<h1>Thunder Kartells</h1>
-<div id="buttonsContainer"></div>
-
-<!-- Admin Panel Toggle -->
-<button id="adminToggle" class="btn" style="position:fixed; top:10px; right:10px;">Admin Panel</button>
-
-<!-- Admin Panel -->
-<div id="adminPanel">
-  <h2>Admin Panel</h2>
-  <input type="password" id="adminPass" placeholder="Enter password">
-  <button id="unlockBtn" class="btn">Unlock</button>
-  <button id="closeAdmin" class="btn">Close</button>
-
-  <hr>
-  <h3>Manage Buttons</h3>
-  <div id="buttonList"></div>
-  <input type="text" id="newButtonName" placeholder="Button Name">
-  <input type="text" id="newButtonURL" placeholder="Button URL">
-  <button id="addButton" class="btn">Add Button</button>
-</div>
-
-<script>
-const ADMIN_PASSWORD = "TK2025"; // change as you like
-let isAdmin = false;
-const buttonsContainer = document.getElementById('buttonsContainer');
-const buttonList = document.getElementById('buttonList');
-let buttons = []; // store buttons [{name,url}]
-
-function renderButtons() {
-  buttonsContainer.innerHTML = '';
-  buttonList.innerHTML = '';
-  buttons.forEach((btn, index) => {
-    // Display main buttons
-    const mainBtn = document.createElement('button');
-    mainBtn.className = 'btn';
-    mainBtn.textContent = btn.name;
-    mainBtn.onclick = () => window.open(btn.url,'_blank');
-    buttonsContainer.appendChild(mainBtn);
-
-    // Display in admin list
-    const div = document.createElement('div');
-    div.className = 'buttonItem';
-    div.innerHTML = `
-      <span>${btn.name} - ${btn.url}</span>
-      <button class="btn" onclick="editButton(${index})">Edit</button>
-      <button class="btn" onclick="removeButton(${index})">Remove</button>
-    `;
-    buttonList.appendChild(div);
-  });
-}
-
-// Admin panel toggle
-document.getElementById('adminToggle').addEventListener('click', () => { document.getElementById('adminPanel').style.display='flex'; });
-document.getElementById('closeAdmin').addEventListener('click', () => { document.getElementById('adminPanel').style.display='none'; });
-
-// Unlock
-document.getElementById('unlockBtn').addEventListener('click', () => {
-  const pass = document.getElementById('adminPass').value;
-  if(pass === ADMIN_PASSWORD){
-    isAdmin = true;
-    alert("Admin Access Granted!");
-    document.getElementById('adminPass').style.display='none';
-    document.getElementById('unlockBtn').style.display='none';
-    renderButtons();
-  } else alert("Wrong Password!");
-});
-
-// Add Button
-document.getElementById('addButton').addEventListener('click', () => {
-  if(!isAdmin) return alert("Unlock admin first!");
-  const name = document.getElementById('newButtonName').value;
-  const url = document.getElementById('newButtonURL').value;
-  if(name && url){
-    buttons.push({name,url});
-    renderButtons();
-    document.getElementById('newButtonName').value='';
-    document.getElementById('newButtonURL').value='';
-  } else alert("Enter Name & URL");
-});
-
-// Edit & Remove functions
-function removeButton(index){ buttons.splice(index,1); renderButtons(); }
-function editButton(index){
-  const newName = prompt("Enter new name:", buttons[index].name);
-  const newURL = prompt("Enter new URL:", buttons[index].url);
-  if(newName && newURL){
-    buttons[index]={name:newName,url:newURL};
-    renderButtons();
-  }
-}
-</script>
-
-</body>
-</html> 
-<style>
-  body, html {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    font-family: Arial, sans-serif;
-  }
-
-  /* Niche section ke liye minimum height bada karo */
-  #thunderFooter {
-    min-height: 500px; /* scroll trigger ke liye badi height */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-    background: #111;
-    color: #0ff;
-    overflow: hidden;
-  }
-
-  .footer-text {
-    font-size: 28px;
-    font-weight: 700;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s ease;
-  }
-
-  .footer-text.small {
-    font-size: 14px;
-    margin-top: 10px;
-  }
-</style>
-<!-- Gallery Button -->
-<div id="galleryBtn" style="text-align:center; margin:20px;">
-  <a href="#" id="galleryLink" style="background:#ff5555; color:#fff; padding:10px 20px; border-radius:5px; text-decoration:none;">
-    Gallery
-  </a>
-</div>
-
-<script>
-  // Gallery Button Functionality
-  const galleryBtn = document.getElementById('galleryLink');
-
-  // Replace with your image URL
-  const galleryImage = "https://via.placeholder.com/600x400"; 
-
-  galleryBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    // Open image in new tab
-    window.open(galleryImage, "_blank");
-  });
-</script>
-<!-- ========= Thunder Kartells Footer ========= -->
-<footer style="
-  background:#0b0b0b;
-  color:#cfefff;
-  padding:24px 16px;
-  text-align:center;
-  font-family: Arial, sans-serif;
-  font-weight:700;
-  letter-spacing:0.5px;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.6);
-">
-  <div style="font-size:14px; line-height:1.4;">
-    2025 &nbsp; THUNDER KARTELLS &nbsp; • &nbsp; EMERGENCY HAMBURG
-  </div>
-  <div style="font-size:12px; color:#9fbecf; margin-top:8px;">
-    COPYRIGHTS RESERVED
-  </div>
-</footer>
-<!-- ============================================ -->
-<!-- ========= Thunder Kartells Extra Features Footer ========= -->
-<footer style="
-  background:#0b0b0b;
-  color:#cfefff;
-  padding:40px 20px;
-  text-align:center;
-  font-family: Arial, sans-serif;
-  font-weight:700;
-  letter-spacing:0.5px;
-  position:relative;
-  overflow:hidden;
-">
-  <!-- Scroll-in animated main text -->
-  <div style="
-    font-size:18px;
-    margin-bottom:12px;
-    transform: translateY(50px);
-    opacity:0;
-    animation: slideUp 1s forwards 0.3s;
-  ">
-    THUNDER KARTELLS &nbsp; • &nbsp; EMERGENCY HAMBURG
-  </div>
-
-  <!-- Navigation links -->
-  <div style="
-    margin-bottom:16px;
-    transform: translateY(50px);
-    opacity:0;
-    animation: slideUp 1s forwards 0.6s;
-  ">
-    <a href="#about" style="color:#cfefff; margin:0 12px; text-decoration:none; font-weight:bold;">About</a>
-    <a href="#gallery" style="color:#cfefff; margin:0 12px; text-decoration:none; font-weight:bold;">Gallery</a>
-    <a href="#join" style="color:#cfefff; margin:0 12px; text-decoration:none; font-weight:bold;">Join</a>
-  </div>
-
-  <!-- YouTube button -->
-  <div style="
-    margin-bottom:16px;
-    transform: translateY(50px);
-    opacity:0;
-    animation: slideUp 1s forwards 0.9s;
-  ">
-    <a href="https://youtube.com/@thunderkartells_eh?si=3SVh4RSciA7aB8Kl" target="_blank" style="
-      display:inline-block;
-      background:#ff0000;
-      color:white;
-      padding:10px 18px;
-      border-radius:8px;
-      text-decoration:none;
-      font-weight:bold;
-      box-shadow:0 4px 6px rgba(0,0,0,0.3);
-      transition:0.3s;
-    " onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
-      YouTube
-    </a>
-  </div>
-
-  <!-- Scroll-to-top button -->
-  <div style="
-    transform: translateY(50px);
-    opacity:0;
-    animation: slideUp 1s forwards 1.2s;
-    margin-top:12px;
-  ">
-    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="
-      background:#00bfff;
-      color:#fff;
-      padding:8px 14px;
-      border:none;
-      border-radius:6px;
-      font-weight:bold;
-      cursor:pointer;
-      transition:0.3s;
-    " onmouseover="this.style.background='#0099cc';" onmouseout="this.style.background='#00bfff';">
-      Scroll to Top
-    </button>
-  </div>
-</footer>
-
-<!-- Slide Up Animation -->
-<style>
-@keyframes slideUp {
-  to { transform: translateY(0); opacity:1; }
-}
-</style>
+</html>
