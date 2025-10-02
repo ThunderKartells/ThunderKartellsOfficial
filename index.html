@@ -9,25 +9,75 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html,body { height: 100%; }
     body {
-      font-family: "Arial", sans-serif;
+      font-family: 'Arial Black', 'Arial', sans-serif;
       color: #fff;
-      background-color: #0a0a0a;
+      background: #000;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Animated gradient overlay */
+    /* Background with animated particles */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: linear-gradient(270deg, rgba(0,170,255,0.12), rgba(0,255,255,0.06), rgba(0,170,255,0.12));
-      background-size: 600% 600%;
-      animation: bgMove 20s ease infinite;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 0, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 0, 120, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(0, 200, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, #000 0%, #111 100%);
+      background-size: cover;
       z-index: 0;
+      animation: bgPulse 8s ease-in-out infinite alternate;
     }
-    @keyframes bgMove {
-      0%{ background-position:0% 50%; } 50%{ background-position:100% 50%; } 100%{ background-position:0% 50%; }
+
+    @keyframes bgPulse {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; }
+    }
+
+    /* Animated particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: float 6s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+
+    /* Grid overlay */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(20, 20, 20, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 20, 20, 0.2) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 1;
+      pointer-events: none;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
     }
 
     /* Preloader */
@@ -43,64 +93,46 @@
     }
     #preloader.hide { opacity:0; visibility:hidden; pointer-events:none; }
 
-    .circle {
-      width: 110px;
-      height: 110px;
-      border-radius:50%;
-      border: 8px solid transparent;
-      border-top-color: #ff0000;
-      border-right-color: #00ff00;
-      border-bottom-color: #0000ff;
-      border-left-color: #ffff00;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      animation: spin 1s linear infinite, colorChange 3s infinite alternate;
-      box-shadow: 0 0 20px rgba(255,0,0,0.3), 0 0 40px rgba(0,255,0,0.3), 0 0 60px rgba(0,0,255,0.3);
-      position: relative;
-    }
-    .circle::before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 100%;
+    .pulse-loader {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      border: 8px solid transparent;
-      border-top-color: #ff00ff;
-      border-right-color: #00ffff;
-      border-bottom-color: #ffff00;
-      border-left-color: #ff0000;
-      animation: spinReverse 1.5s linear infinite, colorChange2 4s infinite alternate;
+      background: linear-gradient(45deg, #ff0080, #8000ff);
+      animation: pulse 1.5s ease-in-out infinite alternate;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 18px;
+      color: #fff;
+      text-shadow: 0 0 10px #fff;
     }
-    .circle span {
-      font-weight:800;
-      color:#fff;
-      font-size:28px;
-      text-shadow: 0 0 10px #fff, 0 0 20px #0ff;
-      letter-spacing:1px;
-      z-index: 1;
+    @keyframes pulse {
+      0% { transform: scale(0.8); box-shadow: 0 0 20px #ff0080; }
+      100% { transform: scale(1.2); box-shadow: 0 0 40px #8000ff, 0 0 60px #ff0080; }
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes spinReverse { to { transform: rotate(-360deg); } }
-    @keyframes colorChange {
-      0% { border-top-color: #ff0000; border-right-color: #00ff00; border-bottom-color: #0000ff; border-left-color: #ffff00; }
-      25% { border-top-color: #00ff00; border-right-color: #0000ff; border-bottom-color: #ffff00; border-left-color: #ff0000; }
-      50% { border-top-color: #0000ff; border-right-color: #ffff00; border-bottom-color: #ff0000; border-left-color: #00ff00; }
-      75% { border-top-color: #ffff00; border-right-color: #ff0000; border-bottom-color: #00ff00; border-left-color: #0000ff; }
-      100% { border-top-color: #ff0000; border-right-color: #00ff00; border-bottom-color: #0000ff; border-left-color: #ffff00; }
-    }
-    @keyframes colorChange2 {
-      0% { border-top-color: #ff00ff; border-right-color: #00ffff; border-bottom-color: #ffff00; border-left-color: #ff0000; }
-      25% { border-top-color: #00ffff; border-right-color: #ffff00; border-bottom-color: #ff0000; border-left-color: #ff00ff; }
-      50% { border-top-color: #ffff00; border-right-color: #ff0000; border-bottom-color: #ff00ff; border-left-color: #00ffff; }
-      75% { border-top-color: #ff0000; border-right-color: #ff00ff; border-bottom-color: #00ffff; border-left-color: #ffff00; }
-      100% { border-top-color: #ff00ff; border-right-color: #00ffff; border-bottom-color: #ffff00; border-left-color: #ff0000; }
+
+    /* Top-left TK logo */
+    .tk-logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 15px;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
     }
 
     /* Main layout */
     #app {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -108,370 +140,435 @@
       justify-content: center;
       text-align: center;
       padding: 24px;
-      gap: 18px;
+      gap: 30px;
       opacity: 0;
       transition: opacity .8s ease, transform .8s ease;
-      transform: translateY(6px);
+      transform: translateY(20px);
     }
     body.loaded #app { opacity: 1; transform: translateY(0); }
 
-    /* Top-left TK */
-    .top-left {
-      position: absolute;
-      top: 18px;
-      left: 18px;
-      z-index: 5;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.2));
-      padding: 8px 10px;
-      border-radius: 8px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.6);
-      backdrop-filter: blur(6px);
-    }
-    .top-left .tk-small { color:#0ff; font-weight:800; font-size:18px; text-shadow:0 0 8px #0ff; }
-    .top-left .tag { color:#ddd; font-size:12px; opacity:0.9; }
-
-    /* Three-dot menu (top-right) */
-    .menu-wrap {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      z-index: 6;
-    }
-    .menu-btn {
-      width:40px; height:40px; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      background: rgba(0,0,0,0.45);
-      border: none; color:#fff; font-size:20px; cursor:pointer;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-      backdrop-filter: blur(6px);
-    }
-    .menu-list {
-      position: absolute;
-      right: 0;
-      margin-top:8px;
-      background: rgba(10,10,10,0.95);
-      border-radius:10px;
-      min-width:160px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-      overflow:hidden;
-      transform-origin: top right;
-      transform: scale(.95);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .18s ease, transform .18s ease, visibility .18s;
-    }
-    .menu-list.show { opacity:1; visibility:visible; transform:scale(1); }
-    .menu-list a {
-      display:block; padding:10px 12px; text-decoration:none; color:#ddd;
-      font-size:14px; border-bottom:1px solid rgba(255,255,255,0.03);
-    }
-    .menu-list a:last-child { border-bottom: none; }
-    .menu-list a:hover { background: rgba(0,170,255,0.06); color:#0ff; }
-
-    /* Center big title */
-    .title-wrap {
-      z-index:2;
-    }
-    .title-wrap h1 {
-      font-size:56px;
-      letter-spacing:6px;
-      margin-bottom:6px;
-      color:#0ff;
-      font-weight:900;
-      text-shadow: 0 0 18px #0ff, 0 0 36px rgba(0,170,255,0.6);
-      animation: glow 1.6s ease-in-out infinite alternate;
-    }
-    .title-wrap p.sub {
-      font-size:18px;
-      color:#eee;
-      margin-bottom:14px;
-      text-shadow: 0 0 8px rgba(0,0,0,0.6);
-      opacity:0.95;
-    }
-    @keyframes glow {
-      from { text-shadow: 0 0 12px #0ff, 0 0 28px rgba(0,170,255,0.5); transform: translateY(0); }
-      to { text-shadow: 0 0 30px #0ff, 0 0 60px rgba(0,170,255,0.9); transform: translateY(-6px); }
+    /* Main Title - Urban Legends Style */
+    .main-title {
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: 8px;
+      margin-bottom: 10px;
+      position: relative;
     }
 
-    /* Buttons row */
-    .btn-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; z-index:2; }
-    .btn {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 16px;
-      border-radius:10px;
-      background: linear-gradient(90deg,#0ff,#00aaff);
-      color:#000;
-      text-decoration:none;
-      font-weight:700;
-      box-shadow: 0 8px 30px rgba(0,170,255,0.15);
-      transition: transform .14s ease, box-shadow .14s ease;
+    .title-line-1 {
+      font-size: 72px;
+      background: linear-gradient(45deg, #fff 30%, #ff0080 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
+      margin-bottom: -10px;
     }
-    .btn:hover { transform: translateY(-4px); box-shadow:0 18px 50px rgba(0,170,255,0.18); }
 
-    /* Footer small */
-    footer {
+    .title-line-2 {
+      font-size: 48px;
+      background: linear-gradient(45deg, #8000ff 30%, #00ffff 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(128, 0, 255, 0.5);
+      margin-bottom: 5px;
+    }
+
+    .title-line-3 {
+      font-size: 36px;
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff;
+      letter-spacing: 15px;
+      margin-left: 15px;
+    }
+
+    /* Tagline */
+    .tagline {
+      font-size: 18px;
+      color: #ccc;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-top: 20px;
+      position: relative;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    .tagline::before, .tagline::after {
+      content: "⚡";
+      color: #ff0080;
+      margin: 0 15px;
+      font-size: 16px;
+    }
+
+    /* Buttons - Modern Style */
+    .btn-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .modern-btn {
+      padding: 15px 30px;
+      border: 2px solid transparent;
+      background: linear-gradient(45deg, #ff0080, #8000ff);
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 14px;
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modern-btn::before {
+      content: '';
       position: absolute;
-      bottom: 10px;
+      top: 0;
+      left: -100%;
       width: 100%;
-      text-align: center;
-      z-index:2;
-      color: #ddd;
-      font-size:13px;
-      opacity:0.9;
-      text-shadow:0 0 6px rgba(0,0,0,0.6);
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
     }
 
-    /* Gallery modal */
+    .modern-btn:hover::before {
+      left: 100%;
+    }
+
+    .modern-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255, 0, 128, 0.3);
+    }
+
+    .modern-btn.secondary {
+      background: transparent;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+    }
+
+    .modern-btn.secondary:hover {
+      background: rgba(0, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+    }
+
+    /* About Section */
+    .about-section {
+      padding: 100px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .about-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      font-size: 36px;
+      color: #00ffff;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 40px;
+      text-shadow: 0 0 20px #00ffff;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .about-text {
+      text-align: center;
+      color: #ccc;
+      line-height: 1.8;
+      font-size: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .about-text p {
+      margin-bottom: 20px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 30px 20px;
+      text-align: center;
+      z-index: 2;
+      color: #666;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-top: 1px solid #333;
+      margin-top: 50px;
+    }
+
+    /* Allies Modal */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.9);
       display:flex;
       align-items:center;
       justify-content:center;
       z-index: 9998;
       opacity:0;
       visibility:hidden;
-      transition: opacity .18s ease, visibility .18s;
+      transition: opacity .3s ease, visibility .3s ease;
     }
     .modal.show { opacity:1; visibility:visible; }
-    .gallery {
-      width: min(920px, 94vw);
-      height: min(560px, 86vh);
-      background: linear-gradient(180deg, rgba(10,10,10,0.98), rgba(6,6,6,0.98));
-      border-radius: 12px;
-      padding: 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
-    }
-    .gallery .stage { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:8px; background:#000; }
-    .gallery img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
-    .gallery .controls { display:flex; justify-content:space-between; gap:8px; align-items:center; }
-    .ghost-btn { background:transparent; border:1px solid rgba(255,255,255,0.06); color:#ddd; padding:8px 12px; border-radius:8px; cursor:pointer; }
-    .close-x { background:transparent; border:none; color:#ddd; font-size:20px; cursor:pointer; }
 
-    /* Allies Modal */
     .allies-modal {
-      width: min(600px, 90vw);
-      max-height: 80vh;
-      background: linear-gradient(180deg, rgba(10,10,10,0.98), rgba(6,6,6,0.98));
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
-      overflow-y: auto;
+      width: min(500px, 90vw);
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid #333;
+      padding: 30px;
+      position: relative;
+      backdrop-filter: blur(10px);
     }
+
     .allies-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      margin-bottom: 30px;
     }
+
     .allies-header h2 {
-      color: #0ff;
+      color: #00ffff;
       font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
     }
-    .allies-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
+
     .ally-card {
       background: rgba(255,255,255,0.05);
-      border-radius: 8px;
+      border-left: 3px solid #ff0080;
       padding: 20px;
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-      transition: transform 0.2s ease, background 0.2s ease;
+      margin-bottom: 20px;
     }
-    .ally-card:hover {
-      transform: translateY(-5px);
-      background: rgba(0,170,255,0.1);
-    }
-    .ally-logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 15px;
-      background: rgba(0,170,255,0.2);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-    }
+
     .ally-name {
+      color: #ff0080;
+      font-size: 18px;
       font-weight: bold;
       margin-bottom: 10px;
-      color: #0ff;
-      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
+
     .ally-desc {
+      color: #ccc;
       font-size: 14px;
-      color: #aaa;
       line-height: 1.5;
+      margin-bottom: 15px;
     }
+
     .spg-buttons {
       display: flex;
       gap: 10px;
-      justify-content: center;
-      margin-top: 15px;
       flex-wrap: wrap;
-    }
-    .spg-btn {
-      background: linear-gradient(90deg, #ff6b00, #ff8c00);
-      color: #000;
-      padding: 8px 16px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 14px;
-      transition: transform 0.2s ease;
-    }
-    .spg-btn:hover {
-      transform: translateY(-2px);
+      justify-content: center;
     }
 
-    /* Content sections for scrollability */
-    .content-section {
-      width: 100%;
-      max-width: 1000px;
-      margin: 40px auto;
-      padding: 30px;
-      background: rgba(0,0,0,0.5);
-      border-radius: 12px;
+    .spg-btn {
+      background: #333;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 12px;
+      border: none;
+      transition: background 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .spg-btn:hover {
+      background: #ff0080;
+    }
+
+    .close-x {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-x:hover {
+      color: #ff0080;
+    }
+
+    /* Gallery Modal */
+    .gallery-modal {
+      width: min(90vw, 800px);
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid #333;
+      padding: 20px;
+      position: relative;
       backdrop-filter: blur(10px);
     }
-    .section-title {
-      color: #0ff;
-      font-size: 28px;
-      margin-bottom: 20px;
-      text-align: center;
-      text-shadow: 0 0 10px #0ff;
+
+    .gallery-image {
+      width: 100%;
+      height: auto;
+      border: 2px solid #333;
     }
 
-    /* Responsive adjustments */
-    @media (max-width:720px) {
-      .title-wrap h1 { font-size:36px; letter-spacing:3px; }
-      .title-wrap p.sub { font-size:15px; }
-      .circle { width:86px; height:86px; border-width:6px; }
-      .circle span { font-size:22px; }
-      .menu-list { min-width:140px; }
-      .ally-name { font-size: 18px; }
-      .spg-buttons { flex-direction: column; }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .title-line-1 { font-size: 48px; letter-spacing: 4px; }
+      .title-line-2 { font-size: 32px; letter-spacing: 3px; }
+      .title-line-3 { font-size: 24px; letter-spacing: 8px; margin-left: 8px; }
+      .btn-container { flex-direction: column; align-items: center; }
+      .modern-btn { width: 250px; }
+      .tagline { font-size: 14px; letter-spacing: 2px; }
+    }
+
+    @media (max-width: 480px) {
+      .title-line-1 { font-size: 36px; }
+      .title-line-2 { font-size: 24px; }
+      .title-line-3 { font-size: 18px; letter-spacing: 6px; }
+      .tk-logo { top: 10px; left: 10px; padding: 8px 12px; font-size: 16px; }
     }
   </style>
 </head>
 <body>
   <!-- Preloader -->
   <div id="preloader">
-    <div class="circle"><span>TK</span></div>
+    <div class="pulse-loader">TK</div>
   </div>
+
+  <!-- Animated Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Top-left TK Logo -->
+  <div class="tk-logo">TK</div>
 
   <!-- App Content -->
   <div id="app" aria-hidden="true">
-    <!-- Top-left TK mini -->
-    <div class="top-left" role="note" aria-label="TK tag">
-      <div class="tk-small">TK</div>
-      <div class="tag">Thunder Kartells</div>
+    <!-- Main Title -->
+    <div class="main-title">
+      <div class="title-line-1">THUNDER</div>
+      <div class="title-line-2">KARTELLS</div>
+      <div class="title-line-3">EMERGENCY HAMBURG</div>
     </div>
 
-    <!-- Top-right 3-dot menu -->
-    <div class="menu-wrap" aria-hidden="false">
-      <button class="menu-btn" id="menuToggle" aria-haspopup="true" aria-expanded="false" title="Menu">⋮</button>
-      <div class="menu-list" id="menuList" role="menu" aria-hidden="true">
-        <a href="#home" role="menuitem">Home</a>
-        <a href="#about" role="menuitem">About</a>
-      </div>
-    </div>
-
-    <!-- Center Title -->
-    <div class="title-wrap" id="home">
-      <h1>TK — THUNDER KARTELLS</h1>
-      <p class="sub">A Brotherhood of Power, Unity & Vibes. We rise together.</p>
-    </div>
+    <!-- Tagline -->
+    <div class="tagline">ELITE FORCE • URBAN DOMINANCE • STRATEGIC BROTHERHOOD</div>
 
     <!-- Buttons -->
-    <div class="btn-row" role="navigation" aria-label="Main links">
-      <a class="btn" id="discordBtn" href="https://discord.gg/FTMyjKs8" target="_blank" rel="noopener noreferrer">🎮 Discord</a>
-      <a class="btn" id="galleryBtn" href="#" role="button">🖼 Gallery</a>
-      <a class="btn" id="youtubeBtn" href="#" target="_blank" rel="noopener noreferrer">▶️ YouTube</a>
-      <a class="btn" id="alliesBtn" href="#" role="button">🤝 ALLIES</a>
-    </div>
-
-    <!-- About Section -->
-    <div class="content-section" id="about">
-      <h2 class="section-title">About Thunder Kartells</h2>
-      <p style="text-align: center; line-height: 1.6; max-width: 800px; margin: 0 auto;">
-        Thunder Kartells is a premier gaming community founded on principles of loyalty, skill, and camaraderie. 
-        We dominate competitive scenes while maintaining a brotherhood that supports each member's growth. 
-        Our ranks include some of the most skilled players across multiple gaming platforms.
-      </p>
-    </div>
-
-    <!-- Footer text -->
-    <footer>FOUNDED 2025</footer>
-  </div>
-
-  <!-- Gallery Modal (hidden initially) -->
-  <div class="modal" id="galleryModal" aria-hidden="true" role="dialog" aria-label="Gallery">
-    <div class="gallery" role="document">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <strong style="color:#0ff;">Gallery</strong>
-        <button class="close-x" id="closeGallery" title="Close">✕</button>
-      </div>
-      <div class="stage" id="galleryStage">
-        <img id="galleryImage" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Gaming setup">
-      </div>
-      <div class="controls">
-        <div>
-          <button class="ghost-btn" id="prevImg">◀ Prev</button>
-          <button class="ghost-btn" id="nextImg">Next ▶</button>
-        </div>
-        <div style="color:#ccc; font-size:13px;">Thunder Kartells Elite Gaming Setup</div>
-      </div>
+    <div class="btn-container">
+      <a href="https://discord.gg/JWET9ypB" target="_blank" class="modern-btn">Discord Server</a>
+      <a href="#" id="galleryBtn" class="modern-btn secondary">View Gallery</a>
+      <a href="#" id="alliesBtn" class="modern-btn secondary">Our Allies</a>
     </div>
   </div>
 
-  <!-- Allies Modal (hidden initially) -->
+  <!-- About Section -->
+  <section class="about-section" id="aboutSection">
+    <h2 class="section-title">About Thunder Kartells</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>Thunder Kartells stands as one of the most elite and respected organizations in Emergency Hamburg. Founded on principles of excellence, loyalty, and strategic dominance, we've established ourselves as a formidable force in the urban landscape.</p>
+        
+        <p>Our brotherhood consists of highly skilled operatives who excel in tactical operations, strategic planning, and urban combat. Each member undergoes rigorous training and demonstrates unwavering commitment to the Kartell's code of honor.</p>
+        
+        <p>We operate with precision and coordination, ensuring every mission is executed flawlessly. From high-stakes extractions to territorial control, Thunder Kartells maintains the highest standards of performance and professionalism.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>FOUNDED 2025 | THUNDER KARTELLS | EMERGENCY HAMBURG</footer>
+
+  <!-- Allies Modal -->
   <div class="modal" id="alliesModal" aria-hidden="true" role="dialog" aria-label="Allies">
     <div class="allies-modal" role="document">
+      <button class="close-x" id="closeAllies" title="Close">✕</button>
+      
       <div class="allies-header">
-        <h2>Our Allies</h2>
-        <button class="close-x" id="closeAllies" title="Close">✕</button>
+        <h2>Strategic Alliance</h2>
+        <div style="color: #666; font-size: 12px; letter-spacing: 2px;">PARTNER ORGANIZATION</div>
       </div>
-      <div class="allies-content">
-        <div class="ally-card">
-          <div class="ally-logo">🛡️</div>
-          <div class="ally-name">SPG - Special Protection Group</div>
-          <div class="ally-desc">
-            Elite Roblox unit in Emergency Hamburg.<br>
-            Discipline • Protection • Teamwork.<br>
-            Join structured roleplay operations, ranked progressions, and city security missions.
-          </div>
-          <div class="spg-buttons">
-            <a href="#" class="spg-btn">📌 Join Discord</a>
-            <a href="#" class="spg-btn">💬 Apply to SPG</a>
-            <a href="#" class="spg-btn">📌 View Gallery</a>
-          </div>
+
+      <div class="ally-card">
+        <div class="ally-name">SPG - Special Protection Group</div>
+        <div class="ally-desc">
+          Elite security unit operating within Emergency Hamburg.<br>
+          Specializing in high-risk protection operations and tactical response.<br>
+          Masters of urban defense and strategic security protocols.
+        </div>
+        <div class="spg-buttons">
+          <a href="https://discord.gg/NVA8ZvwRK" target="_blank" class="spg-btn">Join SPG Discord</a>
         </div>
       </div>
-      <div style="margin-top: 20px; text-align: center;">
-        <p style="color: #aaa; font-size: 14px;">Interested in becoming an ally? Contact us on Discord!</p>
+    </div>
+  </div>
+
+  <!-- Gallery Modal -->
+  <div class="modal" id="galleryModal" aria-hidden="true" role="dialog" aria-label="Gallery">
+    <div class="gallery-modal" role="document">
+      <button class="close-x" id="closeGallery" title="Close">✕</button>
+      
+      <div class="allies-header">
+        <h2>Gallery</h2>
+        <div style="color: #666; font-size: 12px; letter-spacing: 2px;">OPERATIONS & TRAINING</div>
+      </div>
+
+      <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Thunder Kartells Operations" class="gallery-image">
+      
+      <div style="text-align: center; margin-top: 20px; color: #ccc; font-size: 14px;">
+        Thunder Kartells Elite Operations - Emergency Hamburg
       </div>
     </div>
   </div>
 
   <script>
+    // Create animated particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const size = Math.random() * 3 + 1;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 6;
+        const duration = Math.random() * 4 + 4;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${left}vw`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
     // Preloader hide logic
     (function(){
       const pre = document.getElementById('preloader');
@@ -481,73 +578,25 @@
         pre.classList.add('hide');
         document.body.classList.add('loaded');
         app.setAttribute('aria-hidden', 'false');
+        createParticles();
       }
 
-      window.addEventListener('load', () => { setTimeout(finishLoad, 1200); });
-      setTimeout(() => { if (!document.body.classList.contains('loaded')) finishLoad(); }, 5000);
+      window.addEventListener('load', () => { setTimeout(finishLoad, 1500); });
+      setTimeout(() => { if (!document.body.classList.contains('loaded')) finishLoad(); }, 4000);
     })();
 
-    // Menu toggle
-    (function(){
-      const btn = document.getElementById('menuToggle');
-      const list = document.getElementById('menuList');
-      let open = false;
-      btn.addEventListener('click', (e) => {
-        open = !open;
-        list.classList.toggle('show', open);
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        list.setAttribute('aria-hidden', open ? 'false' : 'true');
-      });
-      document.addEventListener('click', (e) => {
-        if (!btn.contains(e.target) && !list.contains(e.target)) {
-          open = false;
-          list.classList.remove('show');
-          btn.setAttribute('aria-expanded','false');
-          list.setAttribute('aria-hidden','true');
-        }
-      });
-    })();
+    // Scroll animation for about section
+    function handleScroll() {
+      const aboutSection = document.getElementById('aboutSection');
+      const sectionPosition = aboutSection.getBoundingClientRect().top;
+      const screenPosition = window.innerHeight / 1.3;
 
-    // Gallery logic
-    (function(){
-      const images = [
-        "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80"
-      ];
-      let idx = 0;
-      const galleryBtn = document.getElementById('galleryBtn');
-      const modal = document.getElementById('galleryModal');
-      const galleryImage = document.getElementById('galleryImage');
-      const closeG = document.getElementById('closeGallery');
-      const prev = document.getElementById('prevImg');
-      const next = document.getElementById('nextImg');
-
-      function openGallery(i=0){
-        idx = i;
-        galleryImage.src = images[idx];
-        modal.classList.add('show');
-        modal.setAttribute('aria-hidden','false');
-        document.body.style.overflow = 'hidden';
+      if (sectionPosition < screenPosition) {
+        aboutSection.classList.add('visible');
       }
-      function closeGallery(){
-        modal.classList.remove('show');
-        modal.setAttribute('aria-hidden','true');
-        document.body.style.overflow = '';
-      }
-      galleryBtn.addEventListener('click', (e) => { e.preventDefault(); openGallery(0); });
-      closeG.addEventListener('click', closeGallery);
-      prev.addEventListener('click', () => { idx = (idx - 1 + images.length) % images.length; galleryImage.src = images[idx]; });
-      next.addEventListener('click', () => { idx = (idx + 1) % images.length; galleryImage.src = images[idx]; });
-      modal.addEventListener('click', (e) => { if (e.target === modal) closeGallery(); });
-      document.addEventListener('keydown', (e) => {
-        if (modal.classList.contains('show')){
-          if (e.key === 'ArrowLeft') prev.click();
-          if (e.key === 'ArrowRight') next.click();
-          if (e.key === 'Escape') closeGallery();
-        }
-      });
-    })();
+    }
+
+    window.addEventListener('scroll', handleScroll);
 
     // ALLIES button functionality
     (function(){
@@ -584,26 +633,51 @@
       });
     })();
 
-    // YouTube link placeholder
-    (function(){ document.getElementById('youtubeBtn').href = "https://youtube.com/@thunderkartells_eh?si=3SVh4RSciA7aB8Kl"; })();
-
-    // Smooth scrolling for menu links
-    document.querySelectorAll('.menu-list a').forEach(link => {
-      link.addEventListener('click', (e) => {
+    // GALLERY button functionality
+    (function(){
+      const galleryBtn = document.getElementById('galleryBtn');
+      const galleryModal = document.getElementById('galleryModal');
+      const closeGallery = document.getElementById('closeGallery');
+      
+      function openGalleryModal(){
+        galleryModal.classList.add('show');
+        galleryModal.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeGalleryModal(){
+        galleryModal.classList.remove('show');
+        galleryModal.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
+      
+      galleryBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        const targetId = link.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth' });
-          // Close menu after clicking
-          document.getElementById('menuList').classList.remove('show');
-          document.getElementById('menuToggle').setAttribute('aria-expanded', 'false');
-          document.getElementById('menuList').setAttribute('aria-hidden', 'true');
+        openGalleryModal();
+      });
+      
+      closeGallery.addEventListener('click', closeGalleryModal);
+      galleryModal.addEventListener('click', (e) => { 
+        if (e.target === galleryModal) closeGalleryModal(); 
+      });
+      
+      document.addEventListener('keydown', (e) => {
+        if (galleryModal.classList.contains('show') && e.key === 'Escape') {
+          closeGalleryModal();
         }
       });
+    })();
+
+    // Add some dynamic effects
+    document.addEventListener('mousemove', (e) => {
+      const app = document.getElementById('app');
+      const x = (e.clientX / window.innerWidth - 0.5) * 10;
+      const y = (e.clientY / window.innerHeight - 0.5) * 10;
+      app.style.transform = `translateY(0) translateX(${x}px) translateY(${y}px)`;
     });
 
-    document.addEventListener('keyup', (e) => { if (e.key === 'Tab') document.body.classList.add('show-focus'); });
+    // Trigger scroll check on load
+    window.addEventListener('load', handleScroll);
   </script>
 </body>
 </html>
