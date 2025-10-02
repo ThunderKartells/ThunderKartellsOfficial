@@ -681,3 +681,158 @@
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THUNDER KARTELLS</title>
+  <style>
+    /* Admin Button Styles */
+    .admin-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+    }
+
+    .admin-btn {
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-size: 12px;
+      cursor: pointer;
+      opacity: 0.3;
+      transition: opacity 0.3s ease;
+    }
+
+    .admin-btn:hover {
+      opacity: 1;
+    }
+
+    .visits-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.95);
+      border: 2px solid #ff4444;
+      padding: 20px;
+      border-radius: 10px;
+      z-index: 10001;
+      display: none;
+    }
+
+    .visits-modal.show {
+      display: block;
+    }
+
+    .visits-count {
+      font-size: 24px;
+      color: #00ffff;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .close-visits {
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Admin Visits Button (Only you can see this) -->
+  <div class="admin-panel">
+    <button class="admin-btn" onclick="showVisits()">👁️ Visits</button>
+  </div>
+
+  <!-- Visits Modal -->
+  <div class="visits-modal" id="visitsModal">
+    <div class="visits-count" id="visitsCount">Loading...</div>
+    <button class="close-visits" onclick="closeVisits()">Close</button>
+  </div>
+
+  <script>
+    // Visit Counter System
+    let visitCount = localStorage.getItem('tk_visits') || 0;
+    
+    // Increment visit count
+    visitCount++;
+    localStorage.setItem('tk_visits', visitCount);
+
+    function showVisits() {
+      const currentVisits = localStorage.getItem('tk_visits') || 0;
+      document.getElementById('visitsCount').textContent = `Total Visits: ${currentVisits}`;
+      document.getElementById('visitsModal').classList.add('show');
+    }
+
+    function closeVisits() {
+      document.getElementById('visitsModal').classList.remove('show');
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+      const modal = document.getElementById('visitsModal');
+      if (event.target === modal) {
+        closeVisits();
+      }
+    });
+  </script>
+</body>
+</html>
+<style>
+    /* Updated Footer Styles */
+    .copyright-footer {
+        background: rgba(0, 0, 0, 0.9);
+        padding: 40px 20px;
+        text-align: center;
+        border-top: 2px solid #00ffff;
+        margin-top: 50px;
+    }
+
+    .copyright-text {
+        font-size: 14px;
+        color: #ccc;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .copyright-logo {
+        font-size: 18px;
+        color: #00ffff;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .founded-text {
+        font-size: 12px;
+        color: #888;
+        letter-spacing: 1px;
+    }
+
+    .copyright-symbol {
+        color: #ff0080;
+        margin-right: 5px;
+    }
+</style>
+
+<!-- Add this in your HTML body where you want the footer -->
+<section class="copyright-footer">
+    <div class="copyright-logo">THUNDER KARTELLS</div>
+    <div class="copyright-text">
+        <span class="copyright-symbol">©</span>
+        ALL COPYRIGHTS RESERVED 2025
+    </div>
+    <div class="founded-text">
+        Thunder Kartells Founded On 2025 By Nprobie
+    </div>
+</section>
