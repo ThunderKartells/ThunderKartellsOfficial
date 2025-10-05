@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THUNDER KARTELLS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html,body { height: 100%; }
+    body {
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      color: #fff;
+      background: #000;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated Background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 0, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 0, 120, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(0, 200, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(45deg, #000 0%, #111 100%);
+      background-size: 400% 400%;
+      z-index: 0;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Grid Animation */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(20, 20, 20, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 20, 20, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 1;
+      pointer-events: none;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+
+    /* Preloader */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 9999;
+      transition: opacity .6s ease, visibility .6s ease;
+    }
+    #preloader.hide { opacity:0; visibility:hidden; pointer-events:none; }
+
+    .pulse-loader {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ff0080, #8000ff);
+      animation: pulse 1.5s ease-in-out infinite alternate;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 18px;
+      color: #fff;
+      text-shadow: 0 0 10px #fff;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.8); box-shadow: 0 0 20px #ff0080; }
+      100% { transform: scale(1.2); box-shadow: 0 0 40px #8000ff, 0 0 60px #ff0080; }
+    }
+
+    /* TK Logo */
+    .tk-logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 15px;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Main App */
+    #app {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      gap: 30px;
+      opacity: 0;
+      transition: opacity .8s ease;
+    }
+    body.loaded #app { opacity: 1; }
+
+    /* Title */
+    .main-title {
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: 8px;
+      margin-bottom: 10px;
+    }
+
+    .title-line-1 {
+      font-size: 72px;
+      background: linear-gradient(45deg, #fff 30%, #ff0080 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
+      margin-bottom: -10px;
+    }
+
+    .title-line-2 {
+      font-size: 48px;
+      background: linear-gradient(45deg, #8000ff 30%, #00ffff 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(128, 0, 255, 0.5);
+      margin-bottom: 5px;
+    }
+
+    .title-line-3 {
+      font-size: 36px;
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff;
+      letter-spacing: 15px;
+      margin-left: 15px;
+    }
+
+    /* Tagline */
+    .tagline {
+      font-size: 18px;
+      color: #ccc;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-top: 20px;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    /* Buttons */
+    .btn-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .modern-btn {
+      padding: 15px 30px;
+      border: 2px solid transparent;
+      background: linear-gradient(45deg, #ff0080, #8000ff);
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 14px;
+      border-radius: 0;
+      transition: all 0.3s ease;
+    }
+
+    .modern-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255, 0, 128, 0.3);
+    }
+
+    .modern-btn.secondary {
+      background: transparent;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+    }
+
+    .modern-btn.secondary:hover {
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    /* About Section */
+    .about-section {
+      padding: 100px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .about-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      font-size: 36px;
+      color: #00ffff;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 40px;
+      text-shadow: 0 0 20px #00ffff;
+    }
+
+    .about-text {
+      text-align: center;
+      color: #ccc;
+      line-height: 1.8;
+      font-size: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .about-text p {
+      margin-bottom: 20px;
+    }
+
+    /* Footer */
+    .copyright-footer {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 2px solid #00ffff;
+      margin-top: 50px;
+    }
+
+    .copyright-text {
+      font-size: 14px;
+      color: #ccc;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .copyright-logo {
+      font-size: 18px;
+      color: #00ffff;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .founded-text {
+      font-size: 12px;
+      color: #888;
+      letter-spacing: 1px;
+    }
+
+    .copyright-symbol {
+      color: #ff0080;
+      margin-right: 5px;
+    }
+
+    /* Modals */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 9998;
+      opacity:0;
+      visibility:hidden;
+      transition: opacity .3s ease;
+    }
+    .modal.show { opacity:1; visibility:visible; }
+
+    .allies-modal {
+      width: min(500px, 90vw);
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid #333;
+      padding: 30px;
+      position: relative;
+    }
+
+    .allies-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .allies-header h2 {
+      color: #00ffff;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .ally-card {
+      background: rgba(255,255,255,0.05);
+      border-left: 3px solid #ff0080;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .ally-name {
+      color: #ff0080;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .ally-desc {
+      color: #ccc;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .spg-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .spg-btn {
+      background: #333;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 12px;
+      transition: background 0.3s ease;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .spg-btn:hover {
+      background: #ff0080;
+    }
+
+    .close-x {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Members Grid */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .member-card {
+      background: rgba(255,255,255,0.05);
+      border-left: 3px solid #ff0080;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .member-name {
+      color: #00ffff;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Admin Button */
+    .admin-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-size: 12px;
+      cursor: pointer;
+      opacity: 0.3;
+      z-index: 10000;
+    }
+
+    .admin-btn:hover {
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .title-line-1 { font-size: 48px; }
+      .title-line-2 { font-size: 32px; }
+      .title-line-3 { font-size: 24px; letter-spacing: 8px; }
+      .btn-container { flex-direction: column; }
+      .modern-btn { width: 250px; }
+      .tagline { font-size: 14px; }
+      .members-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="pulse-loader">TK</div>
+  </div>
+
+  <!-- TK Logo -->
+  <div class="tk-logo">TK</div>
+
+  <!-- Admin Button -->
+  <button class="admin-btn" onclick="showVisits()">👁️ Visits</button>
+
+  <!-- Main App -->
+  <div id="app">
+    <!-- Main Title -->
+    <div class="main-title">
+      <div class="title-line-1">THUNDER</div>
+      <div class="title-line-2">KARTELLS</div>
+      <div class="title-line-3">EMERGENCY HAMBURG</div>
+    </div>
+
+    <!-- Tagline -->
+    <div class="tagline">ELITE FORCE • URBAN DOMINANCE • STRATEGIC BROTHERHOOD</div>
+
+    <!-- Buttons -->
+    <div class="btn-container">
+      <a href="https://discord.gg/JWET9ypB" target="_blank" class="modern-btn">Discord Server</a>
+      <a href="#" id="galleryBtn" class="modern-btn secondary">View Gallery</a>
+      <a href="#" id="alliesBtn" class="modern-btn secondary">Our Allies</a>
+      <a href="#" id="membersBtn" class="modern-btn secondary">👥 Official Members</a>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <section class="about-section" id="aboutSection">
+    <h2 class="section-title">About Thunder Kartells</h2>
+    <div class="about-text">
+      <p>Thunder Kartells stands as one of the most elite and respected organizations in Emergency Hamburg. Founded on principles of excellence, loyalty, and strategic dominance, we've established ourselves as a formidable force in the urban landscape.</p>
+      
+      <p>Our brotherhood consists of highly skilled operatives who excel in tactical operations, strategic planning, and urban combat. Each member undergoes rigorous training and demonstrates unwavering commitment to the Kartell's code of honor.</p>
+      
+      <p>We operate with precision and coordination, ensuring every mission is executed flawlessly. From high-stakes extractions to territorial control, Thunder Kartells maintains the highest standards of performance and professionalism.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <section class="copyright-footer">
+    <div class="copyright-logo">THUNDER KARTELLS</div>
+    <div class="copyright-text">
+      <span class="copyright-symbol">©</span>
+      ALL COPYRIGHTS RESERVED 2025
+    </div>
+    <div class="founded-text">
+      Thunder Kartells Founded On 2025 By Nprobie
+    </div>
+  </section>
+
+  <!-- Allies Modal -->
+  <div class="modal" id="alliesModal">
+    <div class="allies-modal">
+      <button class="close-x" id="closeAllies">✕</button>
+      <div class="allies-header">
+        <h2>Strategic Alliance</h2>
+        <div style="color: #666; font-size: 12px;">PARTNER ORGANIZATION</div>
+      </div>
+      <div class="ally-card">
+        <div class="ally-name">SPG - Special Protection Group</div>
+        <div class="ally-desc">
+          Elite security unit operating within Emergency Hamburg.
+        </div>
+        <div class="spg-buttons">
+          <a href="https://discord.gg/NVA8ZvwRK" target="_blank" class="spg-btn">Join SPG Discord</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Members Modal -->
+  <div class="modal" id="membersModal">
+    <div class="allies-modal">
+      <button class="close-x" id="closeMembers">✕</button>
+      <div class="allies-header">
+        <h2>Official Members</h2>
+        <div style="color: #666; font-size: 12px;">THUNDER KARTELLS ELITE SQUAD</div>
+      </div>
+      <div class="members-grid">
+        <div class="member-card">
+          <div class="member-name">USxTK_Nprobie-YT</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_SAKETER</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_JustAsherGG</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_BABY_PANTHER</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_hepp</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_ASSASSIN</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Total_Yt</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_doraemon_op</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_SAGA</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_!67.Ghost ♥</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Fuad</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_RAPTOR</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Rcry203_eh</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Roben_kartells</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Ruathluii</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_TejendRá</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_(Rohan)NOT available</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_afwan</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_AYUSH_KARTELL</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_AK</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Hazzy</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_TOM_TU</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_[BMW] m340i</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_GLADIATOR</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Ra-moe</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_! SL || -VEDANT</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_OGGY_KARTELLS</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Indra</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_ISHAN_KARTELLS</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Ayush</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Mafiax00</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Mahesh Dalle</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_NetNexus</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_StochyDogite</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_stormtropper</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_mfg_25</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_NightRadioLz</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_THOR</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_MAni1433</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Arshx_47</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_KUBER</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Naruto</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Lucifrr</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_ARNESH</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_RONi(stresinjo)</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_V4mp</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_MBOSS4Quit</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_DEVPLAYZ_YT</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Phantom</div>
+        </div>
+        <div class="member-card">
+          <div class="member-name">USxTK_Ankur</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gallery Modal -->
+  <div class="modal" id="galleryModal">
+    <div class="allies-modal">
+      <button class="close-x" id="closeGallery">✕</button>
+      <div class="allies-header">
+        <h2>Gallery</h2>
+        <div style="color: #666; font-size: 12px;">OPERATIONS & TRAINING</div>
+      </div>
+      <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="Gallery" style="width:100%; border:1px solid #333;">
+    </div>
+  </div>
+
+  <!-- Visits Modal -->
+  <div class="modal" id="visitsModal">
+    <div class="allies-modal">
+      <button class="close-x" id="closeVisits">✕</button>
+      <div class="allies-header">
+        <h2>Website Statistics</h2>
+      </div>
+      <div style="text-align:center; font-size:24px; color:#00ffff; margin:20px 0;" id="visitsCount">0</div>
+    </div>
+  </div>
+
+  <script>
+    // Preloader
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.getElementById('preloader').classList.add('hide');
+        document.body.classList.add('loaded');
+      }, 1200);
+    });
+
+    // Visit Counter
+    let visitCount = localStorage.getItem('tk_visits') || 0;
+    visitCount++;
+    localStorage.setItem('tk_visits', visitCount);
+
+    function showVisits() {
+      document.getElementById('visitsCount').textContent = localStorage.getItem('tk_visits');
+      document.getElementById('visitsModal').classList.add('show');
+    }
+
+    // Scroll Animation for About Section
+    function checkScroll() {
+      const aboutSection = document.getElementById('aboutSection');
+      const sectionPosition = aboutSection.getBoundingClientRect().top;
+      const screenPosition = window.innerHeight / 1.3;
+
+      if (sectionPosition < screenPosition) {
+        aboutSection.classList.add('visible');
+      }
+    }
+
+    window.addEventListener('scroll', checkScroll);
+
+    // Modal Functions
+    function setupModal(btnId, modalId, closeId) {
+      const btn = document.getElementById(btnId);
+      const modal = document.getElementById(modalId);
+      const close = document.getElementById(closeId);
+
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.classList.add('show');
+      });
+
+      close.addEventListener('click', function() {
+        modal.classList.remove('show');
+      });
+
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('show');
+        }
+      });
+    }
+
+    // Setup all modals
+    setupModal('alliesBtn', 'alliesModal', 'closeAllies');
+    setupModal('membersBtn', 'membersModal', 'closeMembers');
+    setupModal('galleryBtn', 'galleryModal', 'closeGallery');
+
+    document.getElementById('closeVisits').addEventListener('click', function() {
+      document.getElementById('visitsModal').classList.remove('show');
+    });
+
+    // Close with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal.show').forEach(modal => {
+          modal.classList.remove('show');
+        });
+      }
+    });
+
+    // Initial scroll check
+    window.addEventListener('load', checkScroll);
+  </script>
+</body>
+</html>
