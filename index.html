@@ -15,44 +15,92 @@
       position: relative;
     }
 
-    /* Animated Background */
-    body::before {
-      content: "";
+    /* Diwali Special Animated Background */
+    .diwali-background {
       position: fixed;
-      inset: 0;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(120, 0, 255, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 0, 120, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(0, 200, 255, 0.1) 0%, transparent 50%),
-        linear-gradient(45deg, #000 0%, #111 100%);
-      background-size: 400% 400%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 0;
-      animation: gradientShift 15s ease infinite;
+      background: linear-gradient(180deg, #0a0a2a 0%, #1a0033 50%, #000 100%);
+      overflow: hidden;
     }
 
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Stars */
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
     }
 
-    /* Grid Animation */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(20, 20, 20, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(20, 20, 20, 0.1) 1px, transparent 1px);
-      background-size: 50px 50px;
-      z-index: 1;
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Fireworks */
+    .firework {
+      position: absolute;
       pointer-events: none;
-      animation: gridMove 20s linear infinite;
     }
 
-    @keyframes gridMove {
-      0% { background-position: 0 0; }
-      100% { background-position: 50px 50px; }
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      animation: explode 1.5s forwards;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: gold;
+      border-radius: 50%;
+      animation: sparkleFall 4s linear infinite;
+      box-shadow: 0 0 6px 2px gold;
+    }
+
+    @keyframes sparkleFall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Light Flares */
+    .light-flare {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: flarePulse 3s ease-in-out infinite;
+      filter: blur(10px);
+    }
+
+    @keyframes flarePulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.2); opacity: 0.6; }
     }
 
     /* Preloader */
@@ -186,6 +234,8 @@
       font-size: 14px;
       border-radius: 0;
       transition: all 0.3s ease;
+      position: relative;
+      z-index: 3;
     }
 
     .modern-btn:hover {
@@ -203,6 +253,10 @@
       background: rgba(0, 255, 255, 0.1);
     }
 
+    .modern-btn.enemy {
+      background: linear-gradient(45deg, #ff4444, #cc0000);
+    }
+
     /* About Section */
     .about-section {
       padding: 100px 20px;
@@ -212,6 +266,8 @@
       opacity: 0;
       transform: translateY(50px);
       transition: all 0.8s ease;
+      position: relative;
+      z-index: 2;
     }
 
     .about-section.visible {
@@ -248,6 +304,8 @@
       text-align: center;
       border-top: 2px solid #00ffff;
       margin-top: 50px;
+      position: relative;
+      z-index: 2;
     }
 
     .copyright-text {
@@ -266,7 +324,7 @@
     }
 
     .founded-text {
-      font-size: 12px;
+      font-size: 14px;
       color: #888;
       letter-spacing: 1px;
     }
@@ -319,8 +377,23 @@
       margin-bottom: 20px;
     }
 
+    .enemy-card {
+      background: rgba(255,255,255,0.05);
+      border-left: 3px solid #ff4444;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
     .ally-name {
       color: #ff0080;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .enemy-name {
+      color: #ff4444;
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 10px;
@@ -332,6 +405,16 @@
       font-size: 14px;
       line-height: 1.5;
       margin-bottom: 15px;
+    }
+
+    .development-message {
+      text-align: center;
+      padding: 40px 20px;
+      color: #ff0080;
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
 
     .spg-buttons {
@@ -367,28 +450,58 @@
       cursor: pointer;
     }
 
-    /* Members Grid */
-    .members-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin-top: 20px;
-      max-height: 400px;
-      overflow-y: auto;
-      padding: 10px;
+    /* Gallery Styles */
+    .gallery-modal {
+      width: min(90vw, 800px);
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid #333;
+      padding: 20px;
+      position: relative;
     }
 
-    .member-card {
-      background: rgba(255,255,255,0.05);
-      border-left: 3px solid #ff0080;
-      padding: 15px;
-      text-align: center;
+    .gallery-image {
+      width: 100%;
+      height: auto;
+      border: 2px solid #333;
+      margin-bottom: 10px;
     }
 
-    .member-name {
-      color: #00ffff;
+    .gallery-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .gallery-input {
+      flex: 1;
+      padding: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid #333;
+      color: white;
+      margin-right: 10px;
+    }
+
+    .add-image-btn {
+      background: #00ffff;
+      color: #000;
+      border: none;
+      padding: 8px 15px;
+      cursor: pointer;
       font-weight: bold;
-      font-size: 16px;
+    }
+
+    .ghost-btn {
+      background: transparent;
+      border: 1px solid #333;
+      color: #ccc;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .ghost-btn:hover {
+      background: rgba(255,255,255,0.1);
     }
 
     /* Admin Button */
@@ -419,11 +532,15 @@
       .btn-container { flex-direction: column; }
       .modern-btn { width: 250px; }
       .tagline { font-size: 14px; }
-      .members-grid { grid-template-columns: 1fr; }
+      .gallery-controls { flex-direction: column; gap: 10px; }
+      .gallery-input { margin-right: 0; margin-bottom: 10px; }
     }
   </style>
 </head>
 <body>
+  <!-- Diwali Special Background -->
+  <div class="diwali-background" id="diwaliBg"></div>
+
   <!-- Preloader -->
   <div id="preloader">
     <div class="pulse-loader">TK</div>
@@ -449,10 +566,11 @@
 
     <!-- Buttons -->
     <div class="btn-container">
-      <a href="https://discord.gg/JWET9ypB" target="_blank" class="modern-btn">Discord Server</a>
+      <a href="https://discord.gg/ehtk" target="_blank" class="modern-btn">Discord Server</a>
       <a href="#" id="galleryBtn" class="modern-btn secondary">View Gallery</a>
       <a href="#" id="alliesBtn" class="modern-btn secondary">Our Allies</a>
       <a href="#" id="membersBtn" class="modern-btn secondary">👥 Official Members</a>
+      <a href="#" id="enemiesBtn" class="modern-btn enemy">⚠️ Enemies</a>
     </div>
   </div>
 
@@ -470,13 +588,12 @@
 
   <!-- Footer -->
   <section class="copyright-footer">
-    <div class="copyright-logo">THUNDER KARTELLS</div>
     <div class="copyright-text">
       <span class="copyright-symbol">©</span>
-      ALL COPYRIGHTS RESERVED 2025
+      THUNDER KARTELLS ALL COPYRIGHTS RESERVED 2025
     </div>
     <div class="founded-text">
-      Thunder Kartells Founded On 2025 By Nprobie
+      Thunder Kartells Founded By Nprobie On 2025
     </div>
   </section>
 
@@ -500,7 +617,25 @@
     </div>
   </div>
 
-  <!-- Members Modal -->
+  <!-- Enemies Modal -->
+  <div class="modal" id="enemiesModal">
+    <div class="allies-modal">
+      <button class="close-x" id="closeEnemies">✕</button>
+      <div class="allies-header">
+        <h2>Known Threats</h2>
+        <div style="color: #666; font-size: 12px;">WANTED ORGANIZATIONS</div>
+      </div>
+      <div class="enemy-card">
+        <div class="enemy-name">VN-VETERANS</div>
+        <div class="ally-desc">
+          Hostile organization operating in Emergency Hamburg territory.
+          Known for aggressive tactics and territorial disputes.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Members Modal - Under Development -->
   <div class="modal" id="membersModal">
     <div class="allies-modal">
       <button class="close-x" id="closeMembers">✕</button>
@@ -508,170 +643,35 @@
         <h2>Official Members</h2>
         <div style="color: #666; font-size: 12px;">THUNDER KARTELLS ELITE SQUAD</div>
       </div>
-      <div class="members-grid">
-        <div class="member-card">
-          <div class="member-name">USxTK_Nprobie-YT</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_SAKETER</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_JustAsherGG</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_BABY_PANTHER</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_hepp</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_ASSASSIN</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Total_Yt</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_doraemon_op</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_SAGA</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_!67.Ghost ♥</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Fuad</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_RAPTOR</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Rcry203_eh</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Roben_kartells</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Ruathluii</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_TejendRá</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_(Rohan)NOT available</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_afwan</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_AYUSH_KARTELL</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_AK</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Hazzy</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_TOM_TU</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_[BMW] m340i</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_GLADIATOR</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Ra-moe</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_! SL || -VEDANT</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_OGGY_KARTELLS</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Indra</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_ISHAN_KARTELLS</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Ayush</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Mafiax00</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Mahesh Dalle</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_NetNexus</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_StochyDogite</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_stormtropper</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_mfg_25</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_NightRadioLz</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_THOR</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_MAni1433</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Arshx_47</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_KUBER</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Naruto</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Lucifrr</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_ARNESH</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_RONi(stresinjo)</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_V4mp</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_MBOSS4Quit</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_DEVPLAYZ_YT</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Phantom</div>
-        </div>
-        <div class="member-card">
-          <div class="member-name">USxTK_Ankur</div>
-        </div>
+      <div class="development-message">
+        🔧 UNDER DEVELOPMENT 🔧
       </div>
     </div>
   </div>
 
   <!-- Gallery Modal -->
   <div class="modal" id="galleryModal">
-    <div class="allies-modal">
+    <div class="gallery-modal">
       <button class="close-x" id="closeGallery">✕</button>
       <div class="allies-header">
         <h2>Gallery</h2>
         <div style="color: #666; font-size: 12px;">OPERATIONS & TRAINING</div>
       </div>
-      <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="Gallery" style="width:100%; border:1px solid #333;">
+      
+      <div class="gallery-controls">
+        <input type="text" id="imageUrl" class="gallery-input" placeholder="Paste image URL here...">
+        <button class="add-image-btn" onclick="addImage()">Add Image</button>
+      </div>
+      
+      <div id="galleryImages">
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="Gallery" class="gallery-image">
+      </div>
+      
+      <div class="gallery-controls">
+        <button class="ghost-btn" id="prevImg">◀ Prev</button>
+        <span id="imageCounter" style="color: #ccc;">1/1</span>
+        <button class="ghost-btn" id="nextImg">Next ▶</button>
+      </div>
     </div>
   </div>
 
@@ -687,11 +687,92 @@
   </div>
 
   <script>
+    // Diwali Background Animation
+    function createDiwaliBackground() {
+      const bg = document.getElementById('diwaliBg');
+      
+      // Create stars
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = Math.random() * 3 + 1 + 'px';
+        star.style.height = star.style.width;
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        bg.appendChild(star);
+      }
+      
+      // Create sparkles
+      for (let i = 0; i < 30; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + 'vw';
+        sparkle.style.animationDelay = Math.random() * 4 + 's';
+        sparkle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        bg.appendChild(sparkle);
+      }
+      
+      // Create light flares
+      for (let i = 0; i < 5; i++) {
+        const flare = document.createElement('div');
+        flare.className = 'light-flare';
+        flare.style.left = Math.random() * 100 + 'vw';
+        flare.style.top = Math.random() * 100 + 'vh';
+        flare.style.animationDelay = Math.random() * 3 + 's';
+        bg.appendChild(flare);
+      }
+      
+      // Create fireworks
+      setInterval(() => {
+        createFirework();
+      }, 800);
+    }
+    
+    function createFirework() {
+      const bg = document.getElementById('diwaliBg');
+      const firework = document.createElement('div');
+      firework.className = 'firework';
+      
+      const x = Math.random() * 100;
+      const y = Math.random() * 80;
+      firework.style.left = x + 'vw';
+      firework.style.top = y + 'vh';
+      
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8000'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.background = color;
+        particle.style.boxShadow = `0 0 6px 2px ${color}`;
+        
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 100 + 50;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance;
+        
+        particle.style.setProperty('--tx', tx + 'px');
+        particle.style.setProperty('--ty', ty + 'px');
+        particle.style.animationDelay = Math.random() * 0.5 + 's';
+        
+        firework.appendChild(particle);
+      }
+      
+      bg.appendChild(firework);
+      
+      setTimeout(() => {
+        firework.remove();
+      }, 1500);
+    }
+
     // Preloader
     window.addEventListener('load', function() {
       setTimeout(function() {
         document.getElementById('preloader').classList.add('hide');
         document.body.classList.add('loaded');
+        createDiwaliBackground();
       }, 1200);
     });
 
@@ -704,6 +785,67 @@
       document.getElementById('visitsCount').textContent = localStorage.getItem('tk_visits');
       document.getElementById('visitsModal').classList.add('show');
     }
+
+    // Gallery System
+    let galleryImages = JSON.parse(localStorage.getItem('tk_gallery')) || [
+      "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+    ];
+    let currentImageIndex = 0;
+
+    function updateGallery() {
+      const galleryContainer = document.getElementById('galleryImages');
+      galleryContainer.innerHTML = '';
+      
+      if (galleryImages.length > 0) {
+        const img = document.createElement('img');
+        img.src = galleryImages[currentImageIndex];
+        img.alt = 'Gallery Image';
+        img.className = 'gallery-image';
+        galleryContainer.appendChild(img);
+        
+        document.getElementById('imageCounter').textContent = `${currentImageIndex + 1}/${galleryImages.length}`;
+      } else {
+        galleryContainer.innerHTML = '<p style="color: #666; text-align: center;">No images yet. Add one above!</p>';
+        document.getElementById('imageCounter').textContent = '0/0';
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('tk_gallery', JSON.stringify(galleryImages));
+    }
+
+    function addImage() {
+      const urlInput = document.getElementById('imageUrl');
+      const url = urlInput.value.trim();
+      
+      if (url) {
+        // Basic URL validation
+        if (url.startsWith('http')) {
+          galleryImages.push(url);
+          currentImageIndex = galleryImages.length - 1;
+          updateGallery();
+          urlInput.value = '';
+        } else {
+          alert('Please enter a valid URL starting with http or https');
+        }
+      } else {
+        alert('Please enter an image URL');
+      }
+    }
+
+    // Gallery navigation
+    document.getElementById('prevImg').addEventListener('click', function() {
+      if (galleryImages.length > 0) {
+        currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+        updateGallery();
+      }
+    });
+
+    document.getElementById('nextImg').addEventListener('click', function() {
+      if (galleryImages.length > 0) {
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        updateGallery();
+      }
+    });
 
     // Scroll Animation for About Section
     function checkScroll() {
@@ -727,6 +869,11 @@
       btn.addEventListener('click', function(e) {
         e.preventDefault();
         modal.classList.add('show');
+        
+        // If opening gallery, update it
+        if (modalId === 'galleryModal') {
+          updateGallery();
+        }
       });
 
       close.addEventListener('click', function() {
@@ -744,6 +891,7 @@
     setupModal('alliesBtn', 'alliesModal', 'closeAllies');
     setupModal('membersBtn', 'membersModal', 'closeMembers');
     setupModal('galleryBtn', 'galleryModal', 'closeGallery');
+    setupModal('enemiesBtn', 'enemiesModal', 'closeEnemies');
 
     document.getElementById('closeVisits').addEventListener('click', function() {
       document.getElementById('visitsModal').classList.remove('show');
@@ -760,6 +908,9 @@
 
     // Initial scroll check
     window.addEventListener('load', checkScroll);
+    
+    // Initialize gallery
+    updateGallery();
   </script>
 </body>
 </html>
