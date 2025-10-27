@@ -4,11 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>THUNDER KARTELLS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html,body { height: 100%; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    html, body { 
+      height: 100%; 
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
     body {
-      font-family: 'Arial Black', 'Arial', sans-serif;
       color: #fff;
       background: #000;
       overflow-x: hidden;
@@ -108,13 +117,18 @@
       position: fixed;
       inset: 0;
       background: #000;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 9999;
       transition: opacity .6s ease, visibility .6s ease;
     }
-    #preloader.hide { opacity:0; visibility:hidden; pointer-events:none; }
+    
+    #preloader.hide { 
+      opacity: 0; 
+      visibility: hidden; 
+      pointer-events: none; 
+    }
 
     .pulse-loader {
       width: 80px;
@@ -130,9 +144,16 @@
       color: #fff;
       text-shadow: 0 0 10px #fff;
     }
+    
     @keyframes pulse {
-      0% { transform: scale(0.8); box-shadow: 0 0 20px #ff0080; }
-      100% { transform: scale(1.2); box-shadow: 0 0 40px #8000ff, 0 0 60px #ff0080; }
+      0% { 
+        transform: scale(0.8); 
+        box-shadow: 0 0 20px #ff0080; 
+      }
+      100% { 
+        transform: scale(1.2); 
+        box-shadow: 0 0 40px #8000ff, 0 0 60px #ff0080; 
+      }
     }
 
     /* TK Logo */
@@ -151,6 +172,70 @@
       text-transform: uppercase;
     }
 
+    /* Three-dot Menu */
+    .menu-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .menu-toggle {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transform: scale(1.1);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid #00ffff;
+      border-radius: 5px;
+      padding: 10px 0;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 20px;
+      color: #00ffff;
+      text-decoration: none;
+      transition: background 0.3s;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .dropdown-menu a:hover {
+      background: rgba(0, 255, 255, 0.1);
+    }
+
     /* Main App */
     #app {
       position: relative;
@@ -166,40 +251,43 @@
       opacity: 0;
       transition: opacity .8s ease;
     }
-    body.loaded #app { opacity: 1; }
+    
+    body.loaded #app { 
+      opacity: 1; 
+    }
 
-    /* Title */
+    /* Cool Title */
     .main-title {
       text-transform: uppercase;
       font-weight: 900;
-      letter-spacing: 8px;
+      letter-spacing: 6px;
       margin-bottom: 10px;
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
     }
 
-    .title-line-1 {
-      font-size: 72px;
-      background: linear-gradient(45deg, #fff 30%, #ff0080 70%);
+    .cool-title {
+      font-size: 6.5rem;
+      background: linear-gradient(45deg, #ff0080, #8000ff, #00ffff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
       text-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
-      margin-bottom: -10px;
+      line-height: 1;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
     }
 
-    .title-line-2 {
-      font-size: 48px;
-      background: linear-gradient(45deg, #8000ff 30%, #00ffff 70%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(128, 0, 255, 0.5);
-      margin-bottom: 5px;
-    }
-
-    .title-line-3 {
-      font-size: 36px;
-      color: #00ffff;
-      text-shadow: 0 0 20px #00ffff;
-      letter-spacing: 15px;
-      margin-left: 15px;
+    .cool-title::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #ff0080, #8000ff, #00ffff);
+      border-radius: 5px;
     }
 
     /* Tagline */
@@ -208,7 +296,7 @@
       color: #ccc;
       letter-spacing: 4px;
       text-transform: uppercase;
-      margin-top: 20px;
+      margin-top: 40px;
       line-height: 1.6;
       max-width: 600px;
     }
@@ -282,6 +370,7 @@
       letter-spacing: 4px;
       margin-bottom: 40px;
       text-shadow: 0 0 20px #00ffff;
+      font-family: 'Orbitron', sans-serif;
     }
 
     .about-text {
@@ -295,6 +384,104 @@
 
     .about-text p {
       margin-bottom: 20px;
+    }
+
+    /* Ranks Section */
+    .ranks-section {
+      padding: 100px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ranks-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ranks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .rank-category {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,255,255,0.2);
+      padding: 25px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+
+    .rank-category h3 {
+      color: #ff0080;
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 2px solid #00ffff;
+      padding-bottom: 10px;
+    }
+
+    .rank-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rank-item {
+      background: rgba(0,0,0,0.5);
+      padding: 12px 15px;
+      border-left: 4px solid #00ffff;
+      text-align: left;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rank-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .rank-item:hover::before {
+      left: 100%;
+    }
+
+    .rank-item:hover {
+      transform: translateX(10px);
+      border-left-color: #ff0080;
+    }
+
+    .rank-name {
+      color: #00ffff;
+      font-weight: bold;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .rank-badge {
+      display: inline-block;
+      background: #ff0080;
+      color: white;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 8px;
+      text-transform: uppercase;
     }
 
     /* Footer */
@@ -316,13 +503,6 @@
       margin-bottom: 10px;
     }
 
-    .copyright-logo {
-      font-size: 18px;
-      color: #00ffff;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
     .founded-text {
       font-size: 14px;
       color: #888;
@@ -339,15 +519,19 @@
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.9);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 9998;
-      opacity:0;
-      visibility:hidden;
+      opacity: 0;
+      visibility: hidden;
       transition: opacity .3s ease;
     }
-    .modal.show { opacity:1; visibility:visible; }
+    
+    .modal.show { 
+      opacity: 1; 
+      visibility: visible; 
+    }
 
     .allies-modal {
       width: min(500px, 90vw);
@@ -507,7 +691,7 @@
     /* Admin Button */
     .admin-btn {
       position: fixed;
-      top: 20px;
+      top: 90px;
       right: 20px;
       background: #ff4444;
       color: white;
@@ -526,14 +710,21 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-      .title-line-1 { font-size: 48px; }
-      .title-line-2 { font-size: 32px; }
-      .title-line-3 { font-size: 24px; letter-spacing: 8px; }
+      .cool-title {
+        font-size: 4rem;
+      }
       .btn-container { flex-direction: column; }
       .modern-btn { width: 250px; }
       .tagline { font-size: 14px; }
       .gallery-controls { flex-direction: column; gap: 10px; }
       .gallery-input { margin-right: 0; margin-bottom: 10px; }
+      .ranks-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .cool-title {
+        font-size: 3rem;
+      }
     }
   </style>
 </head>
@@ -549,16 +740,28 @@
   <!-- TK Logo -->
   <div class="tk-logo">TK</div>
 
+  <!-- Three-dot Menu -->
+  <div class="menu-container">
+    <div class="menu-toggle" id="menuToggle">☰</div>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <a href="#app">Home</a>
+      <a href="#aboutSection">About</a>
+      <a href="#ranksSection">Ranks</a>
+      <a href="#" id="galleryBtnMenu">Gallery</a>
+      <a href="#" id="alliesBtnMenu">Allies</a>
+      <a href="#" id="membersBtnMenu">Members</a>
+      <a href="#" id="enemiesBtnMenu">Enemies</a>
+    </div>
+  </div>
+
   <!-- Admin Button -->
   <button class="admin-btn" onclick="showVisits()">👁️ Visits</button>
 
   <!-- Main App -->
   <div id="app">
-    <!-- Main Title -->
+    <!-- Cool Title -->
     <div class="main-title">
-      <div class="title-line-1">THUNDER</div>
-      <div class="title-line-2">KARTELLS</div>
-      <div class="title-line-3">EMERGENCY HAMBURG</div>
+      <div class="cool-title">THUNDER KARTELLS</div>
     </div>
 
     <!-- Tagline -->
@@ -566,7 +769,7 @@
 
     <!-- Buttons -->
     <div class="btn-container">
-      <a href="https://discord.gg/ehtk" target="_blank" class="modern-btn">Discord Server</a>
+      <a href="https://discord.gg/JWET9ypB" target="_blank" class="modern-btn">Discord Server</a>
       <a href="#" id="galleryBtn" class="modern-btn secondary">View Gallery</a>
       <a href="#" id="alliesBtn" class="modern-btn secondary">Our Allies</a>
       <a href="#" id="membersBtn" class="modern-btn secondary">👥 Official Members</a>
@@ -578,11 +781,102 @@
   <section class="about-section" id="aboutSection">
     <h2 class="section-title">About Thunder Kartells</h2>
     <div class="about-text">
-      <p>Thunder Kartells stands as one of the most elite and respected organizations in Emergency Hamburg. Founded on principles of excellence, loyalty, and strategic dominance, we've established ourselves as a formidable force in the urban landscape.</p>
+      <p>Thunder Kartells stands as one of the most elite and respected organizations in the urban landscape. Founded on principles of excellence, loyalty, and strategic dominance, we've established ourselves as a formidable force.</p>
       
       <p>Our brotherhood consists of highly skilled operatives who excel in tactical operations, strategic planning, and urban combat. Each member undergoes rigorous training and demonstrates unwavering commitment to the Kartell's code of honor.</p>
       
       <p>We operate with precision and coordination, ensuring every mission is executed flawlessly. From high-stakes extractions to territorial control, Thunder Kartells maintains the highest standards of performance and professionalism.</p>
+    </div>
+  </section>
+
+  <!-- Ranks Section -->
+  <section class="ranks-section" id="ranksSection">
+    <h2 class="section-title">Organization Ranks</h2>
+    <div class="ranks-grid">
+      <!-- Leadership Category -->
+      <div class="rank-category">
+        <h3>Leadership</h3>
+        <div class="rank-list">
+          <div class="rank-item">
+            <div class="rank-name">LEADER</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">JR LEADER</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">CO LEADER <span class="rank-badge">PRB</span></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">CO BOSS <span class="rank-badge">PRB</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Management Category -->
+      <div class="rank-category">
+        <h3>Management</h3>
+        <div class="rank-list">
+          <div class="rank-item">
+            <div class="rank-name">VIZE BOSS <span class="rank-badge">PRB</span></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">VIZE II</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">VIZE <span class="rank-badge">PRB</span></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">MANAGER II</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">MANAGER <span class="rank-badge">PRB</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Special Roles Category -->
+      <div class="rank-category">
+        <h3>Special Roles</h3>
+        <div class="rank-list">
+          <div class="rank-item">
+            <div class="rank-name">STV OWNER</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">ADMIN</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">STV OWNER <span class="rank-badge">PRB</span></div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">TEAM LEADER</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">TEAM LEADER <span class="rank-badge">PRB</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TK Elite Category -->
+      <div class="rank-category">
+        <h3>TK Elite Units</h3>
+        <div class="rank-list">
+          <div class="rank-item">
+            <div class="rank-name">TK MODERATION</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">TK ACE</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">TK ACE MOBILE</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">TK ELITE</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-name">TK ELITE MOBILE</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -608,7 +902,7 @@
       <div class="ally-card">
         <div class="ally-name">SPG - Special Protection Group</div>
         <div class="ally-desc">
-          Elite security unit operating within Emergency Hamburg.
+          Elite security unit operating within the urban landscape.
         </div>
         <div class="spg-buttons">
           <a href="https://discord.gg/NVA8ZvwRK" target="_blank" class="spg-btn">Join SPG Discord</a>
@@ -626,9 +920,9 @@
         <div style="color: #666; font-size: 12px;">WANTED ORGANIZATIONS</div>
       </div>
       <div class="enemy-card">
-        <div class="enemy-name">VN-VETERANS</div>
+        <div class="enemy-name">VN-VETERNAS</div>
         <div class="ally-desc">
-          Hostile organization operating in Emergency Hamburg territory.
+          Hostile organization operating in our territory.
           Known for aggressive tactics and territorial disputes.
         </div>
       </div>
@@ -776,6 +1070,21 @@
       }, 1200);
     });
 
+    // Three-dot Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    
+    menuToggle.addEventListener('click', function() {
+      dropdownMenu.classList.toggle('show');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.classList.remove('show');
+      }
+    });
+
     // Visit Counter
     let visitCount = localStorage.getItem('tk_visits') || 0;
     visitCount++;
@@ -847,14 +1156,20 @@
       }
     });
 
-    // Scroll Animation for About Section
+    // Scroll Animation for About and Ranks Sections
     function checkScroll() {
       const aboutSection = document.getElementById('aboutSection');
-      const sectionPosition = aboutSection.getBoundingClientRect().top;
+      const ranksSection = document.getElementById('ranksSection');
+      const aboutPosition = aboutSection.getBoundingClientRect().top;
+      const ranksPosition = ranksSection.getBoundingClientRect().top;
       const screenPosition = window.innerHeight / 1.3;
 
-      if (sectionPosition < screenPosition) {
+      if (aboutPosition < screenPosition) {
         aboutSection.classList.add('visible');
+      }
+      
+      if (ranksPosition < screenPosition) {
+        ranksSection.classList.add('visible');
       }
     }
 
@@ -869,6 +1184,7 @@
       btn.addEventListener('click', function(e) {
         e.preventDefault();
         modal.classList.add('show');
+        dropdownMenu.classList.remove('show');
         
         // If opening gallery, update it
         if (modalId === 'galleryModal') {
@@ -893,6 +1209,12 @@
     setupModal('galleryBtn', 'galleryModal', 'closeGallery');
     setupModal('enemiesBtn', 'enemiesModal', 'closeEnemies');
 
+    // Setup menu modal buttons
+    setupModal('alliesBtnMenu', 'alliesModal', 'closeAllies');
+    setupModal('membersBtnMenu', 'membersModal', 'closeMembers');
+    setupModal('galleryBtnMenu', 'galleryModal', 'closeGallery');
+    setupModal('enemiesBtnMenu', 'enemiesModal', 'closeEnemies');
+
     document.getElementById('closeVisits').addEventListener('click', function() {
       document.getElementById('visitsModal').classList.remove('show');
     });
@@ -903,6 +1225,7 @@
         document.querySelectorAll('.modal.show').forEach(modal => {
           modal.classList.remove('show');
         });
+        dropdownMenu.classList.remove('show');
       }
     });
 
